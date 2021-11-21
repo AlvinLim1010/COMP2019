@@ -8,7 +8,7 @@ class Lines(Frame):
         self.initUI()
 
     def initUI(self):
-        self.pack(fill=BOTH, expand=1)
+        self.pack(fill=BOTH, expand=1)  
 
         canvas = Canvas(self)
         canvas.create_line(15, 100, 980, 100)
