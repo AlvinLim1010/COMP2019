@@ -1,5 +1,4 @@
 from tkinter import *
-import Lines as Lines
 
 window = Tk()
 
@@ -10,16 +9,20 @@ loginLabel = Label(
     bg="grey",
     width=100,
     height=4,
-)
+).grid(column=0, row=0, pady=20, padx=150)
 
-loginLabel.grid(column=5, row=3)
+topLine = Canvas(width=1000)
+topLine.create_line(20, 5, 980, 5)
+topLine.grid(row=1, column=0)
+
+botLine = Canvas(width=1000)
+botLine.create_line(20, 5, 980, 5)
+botLine.grid(row=3, column=0)
 
 
 def main():
-    loginLabel.pack()
     window.title('Software')
     window.geometry("1000x750+300+300")
-    Lines.Lines()
     window.mainloop()
 
 
