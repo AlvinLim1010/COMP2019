@@ -19,19 +19,23 @@ topLine = tk.Canvas(width=1000)
 topLine.create_line(20, 5, 980, 5)
 topLine.grid(row=1, column=0)
 
-label = ttk.Label(window, text = "Enter username")
-label.grid(column=0, row=1, pady=(150, 0))
+rectangle = tk.Canvas(width=1000)
+rectangle.create_rectangle(50, 250, 350, 50)
+rectangle.grid(row=1, column=0, padx=(300,0), pady=(100,0))
+
+label = ttk.Label(window, text="Enter username")
+label.grid(column=0, row=1, pady=(0, 0))
 
 username = tk.StringVar()
 nameEntered = ttk.Entry(window, width=30, textvariable=username)
-nameEntered.grid(column=0, row=1, pady=(210, 0))
+nameEntered.grid(column=0, row=1, pady=(60, 0))
 
-label = ttk.Label(window, text = "Enter password")
-label.grid(column=0, row=2, pady=(0, 100))
+label = ttk.Label(window, text="Enter password")
+label.grid(column=0, row=1, pady=(150, 0))
 
 password = tk.StringVar()
 nameEntered = ttk.Entry(window, width=30, textvariable=password, show="*")
-nameEntered.grid(column=0, row=2, pady=(0, 50))
+nameEntered.grid(column=0, row=1, pady=(200, 0))
 
 botLine = tk.Canvas(width=1000)
 botLine.create_line(20, 5, 980, 5)
