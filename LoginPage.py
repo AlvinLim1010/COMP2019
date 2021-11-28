@@ -11,6 +11,9 @@ loginLabel = Label(
     height=4,
 ).grid(column=0, row=0, pady=20, padx=150)
 
+Grid.rowconfigure(window,0, weight = 1)
+Grid.columnconfigure(window,0, weight = 1)
+
 topLine = Canvas(width=1000)
 topLine.create_line(20, 5, 980, 5)
 topLine.grid(row=1, column=0)
