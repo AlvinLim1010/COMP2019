@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import ttk
 
 window = tk.Tk()
 
@@ -21,20 +20,20 @@ topLine.grid(row=1, column=0)
 
 rectangle = tk.Canvas(width=1000)
 rectangle.create_rectangle(50, 250, 350, 50)
-rectangle.grid(row=1, column=0, padx=(300,0), pady=(100,0))
+rectangle.grid(row=1, column=0, padx=(300, 0), pady=(100, 0))
 
-label = ttk.Label(window, text="Enter username")
+label = tk.Label(window, text="Enter username")
 label.grid(column=0, row=1, pady=(0, 0))
 
 username = tk.StringVar()
-nameEntered = ttk.Entry(window, width=30, textvariable=username)
+nameEntered = tk.Entry(window, width=30, textvariable=username)
 nameEntered.grid(column=0, row=1, pady=(60, 0))
 
-label = ttk.Label(window, text="Enter password")
+label = tk.Label(window, text="Enter password")
 label.grid(column=0, row=1, pady=(150, 0))
 
 password = tk.StringVar()
-nameEntered = ttk.Entry(window, width=30, textvariable=password, show="*")
+nameEntered = tk.Entry(window, width=30, textvariable=password, show="*")
 nameEntered.grid(column=0, row=1, pady=(200, 0))
 
 botLine = tk.Canvas(width=1000)
