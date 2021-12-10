@@ -1,22 +1,19 @@
 import tkinter as tk
 
 window = tk.Tk()
+window.overrideredirect(True)
+window.title('Software')
+window.geometry("1000x750")
 
 
 def validateLogin(user_username, user_password):
     if user_username == "admin" and user_password == "admin":
         window.destroy()
-        import HomePage
+        import homePage
 
 
-loginLabel = tk.Label(
-    window,
-    text="LOGIN",
-    fg="white",
-    bg="grey",
-    width=100,
-    height=4,
-).grid(column=0, row=0, pady=20, padx=150)
+loginLabel = tk.Label(window, text="LOGIN", fg="white", bg="grey", width=100, height=4)
+loginLabel.grid(column=0, row=0, pady=20, padx=150)
 
 tk.Grid.rowconfigure(window, 0, weight=1)
 tk.Grid.columnconfigure(window, 0, weight=1)
@@ -52,7 +49,5 @@ botLine.create_line(20, 5, 980, 5)
 botLine.grid(row=3, column=0)
 
 
-window.title('Software')
-window.geometry("1000x750")
 window.mainloop()
 
