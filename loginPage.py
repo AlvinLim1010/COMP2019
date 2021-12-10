@@ -2,8 +2,15 @@ import tkinter as tk
 
 window = tk.Tk()
 window.overrideredirect(True)
+
+windowWidth = window.winfo_reqwidth()
+windowHeight = window.winfo_reqheight()
+
+positionRight = int(window.winfo_screenwidth()/4 - windowWidth/2)
+positionDown = int(window.winfo_screenheight()/5 - windowHeight/2)
+
 window.title('Software')
-window.geometry("1000x750")
+window.geometry("1000x750+{}+{}".format(positionRight, positionDown))
 
 
 def validateLogin(user_username, user_password):
