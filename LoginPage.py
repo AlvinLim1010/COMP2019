@@ -2,6 +2,13 @@ import tkinter as tk
 
 window = tk.Tk()
 
+
+def validateLogin(user_username, user_password):
+    if user_username == "admin" and user_password == "admin":
+        window.destroy()
+        import HomePage
+
+
 loginLabel = tk.Label(
     window,
     text="LOGIN",
@@ -36,16 +43,16 @@ password = tk.StringVar()
 nameEntered = tk.Entry(window, width=30, textvariable=password, show="*")
 nameEntered.grid(column=0, row=1, pady=(200, 0))
 
+logInButton = tk.Button(window, text="LOGIN", font=("Arial", 10), fg="white", bg="grey", width=15, height=1,
+                        command=lambda: validateLogin(username.get(), password.get()))
+logInButton.grid(column=0, row=1, pady=(275, 0))
+
 botLine = tk.Canvas(width=1000)
 botLine.create_line(20, 5, 980, 5)
 botLine.grid(row=3, column=0)
 
 
-def main():
-    window.title('Software')
-    window.geometry("1000x750+300+300")
-    window.mainloop()
+window.title('Software')
+window.geometry("1000x750")
+window.mainloop()
 
-
-if __name__ == '__main__':
-    main()
