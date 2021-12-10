@@ -1,7 +1,7 @@
 import tkinter as tk
 
 window = tk.Tk()
-window.overrideredirect(True)
+window.overrideredirect(False)
 
 windowWidth = window.winfo_reqwidth()
 windowHeight = window.winfo_reqheight()
@@ -28,7 +28,8 @@ def toHistoryPage():
     import historyPage
 
 
-logOutLabel = tk.Button(window, text="LOG OUT", font=("Arial", 7), fg="white", bg="grey", width=10, height=2, command=toLoginPage)
+logOutLabel = tk.Button(window, text="LOG OUT", font=("Arial", 7), fg="white", bg="grey", width=10, height=2,
+                        command=lambda: toLoginPage())
 logOutLabel.grid(column=0, row=0, padx=(900, 20), pady=(5, 700))
 
 loginLabel = tk.Label(window, text="HOME PAGE", fg="white", bg="grey", width=100, height=4)
@@ -47,14 +48,14 @@ homeButton = tk.Button(window, text="HOME", font=("Arial", 8), fg="white", bg="g
 homeButton.grid(column=0, row=0, padx=(10, 665), pady=(6, 506))
 
 predictButton = tk.Button(window, text="PREDICT", font=("Arial", 8), fg="white", bg="grey", width=23, height=2,
-                          command=toPredictionPage)
+                          command=lambda: toPredictionPage())
 predictButton.grid(column=0, row=0, padx=(110, 335), pady=(6, 506))
 
 trainButton = tk.Button(window, text="TRAIN", font=("Arial", 8), fg="white", bg="grey", width=23, height=2)
 trainButton.grid(column=0, row=0, padx=(335, 130), pady=(6, 506))
 
 historyButton = tk.Button(window, text="HISTORY", font=("Arial", 8), fg="white", bg="grey", width=23, height=2,
-                          command=toHistoryPage)
+                          command=lambda: toHistoryPage())
 historyButton.grid(column=0, row=0, padx=(665, 30), pady=(6, 506))
 
 instructionLabel = tk.Label(window, text="INSTRUCTIONS", font=("Arial", 15))

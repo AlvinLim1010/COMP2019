@@ -1,7 +1,7 @@
 import tkinter as tk
 
 window = tk.Tk()
-window.overrideredirect(True)
+window.overrideredirect(False)
 
 windowWidth = window.winfo_reqwidth()
 windowHeight = window.winfo_reqheight()
@@ -28,7 +28,8 @@ def toPredictionPage():
     import predictionPage
 
 
-logOutLabel = tk.Button(window, text="LOG OUT", font=("Arial", 7), fg="white", bg="grey", width=10, height=2, command=toLoginPage)
+logOutLabel = tk.Button(window, text="LOG OUT", font=("Arial", 7), fg="white", bg="grey", width=10, height=2,
+                        command=lambda: toLoginPage())
 logOutLabel.grid(column=0, row=0, padx=(900, 20), pady=(5, 700))
 
 loginLabel = tk.Label(window, text="HISTORY", fg="white", bg="grey", width=100, height=4)
@@ -43,11 +44,11 @@ rectangle.create_rectangle(10, 645, 950, 85)
 rectangle.grid(row=0, column=0, padx=(15, 15), pady=(80, 0))
 
 homeButton = tk.Button(window, text="HOME", font=("Arial", 8), fg="white", bg="grey", width=23, height=2,
-                       command=toHomePage)
+                       command=lambda: toHomePage())
 homeButton.grid(column=0, row=0, padx=(10, 665), pady=(6, 506))
 
 predictButton = tk.Button(window, text="PREDICT", font=("Arial", 8), fg="white", bg="grey", width=23, height=2,
-                          command=toPredictionPage)
+                          command=lambda: toPredictionPage())
 predictButton.grid(column=0, row=0, padx=(110, 335), pady=(6, 506))
 
 trainButton = tk.Button(window, text="TRAIN", font=("Arial", 8), fg="white", bg="grey", width=23, height=2)

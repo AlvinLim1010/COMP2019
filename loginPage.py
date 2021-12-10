@@ -1,13 +1,13 @@
 import tkinter as tk
 
 window = tk.Tk()
-window.overrideredirect(True)
+window.overrideredirect(False)
 
 windowWidth = window.winfo_reqwidth()
 windowHeight = window.winfo_reqheight()
 
-positionRight = int(window.winfo_screenwidth()/4 - windowWidth/2)
-positionDown = int(window.winfo_screenheight()/5 - windowHeight/2)
+positionRight = int(window.winfo_screenwidth() / 4.5 - windowWidth / 2)
+positionDown = int(window.winfo_screenheight() / 5 - windowHeight / 2)
 
 window.title('Software')
 window.geometry("1000x750+{}+{}".format(positionRight, positionDown))
@@ -55,6 +55,4 @@ botLine = tk.Canvas(width=1000)
 botLine.create_line(20, 5, 980, 5)
 botLine.grid(row=3, column=0)
 
-
 window.mainloop()
-
