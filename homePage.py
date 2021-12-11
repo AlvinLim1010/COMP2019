@@ -6,8 +6,8 @@ window.overrideredirect(False)
 windowWidth = window.winfo_reqwidth()
 windowHeight = window.winfo_reqheight()
 
-positionRight = int(window.winfo_screenwidth()/4 - windowWidth/2)
-positionDown = int(window.winfo_screenheight()/5 - windowHeight/2)
+positionRight = int(window.winfo_screenwidth() / 4 - windowWidth / 2)
+positionDown = int(window.winfo_screenheight() / 5 - windowHeight / 2)
 
 window.title('Software')
 window.geometry("1000x750+{}+{}".format(positionRight, positionDown))
@@ -61,6 +61,4 @@ historyButton.grid(column=0, row=0, padx=(665, 30), pady=(6, 506))
 instructionLabel = tk.Label(window, text="INSTRUCTIONS", font=("Arial", 15))
 instructionLabel.grid(column=0, row=0, padx=(10, 805), pady=(120, 506))
 
-
 window.mainloop()
-

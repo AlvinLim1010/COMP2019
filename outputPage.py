@@ -45,7 +45,7 @@ tk.Grid.columnconfigure(window, 0, weight=1)
 
 rectangle = tk.Canvas(width=1000, height=750)
 rectangle.create_rectangle(10, 70, 950, 20)
-rectangle.create_rectangle(10, 565, 950, 95)
+rectangle.create_rectangle(10, 545, 950, 95)
 rectangle.grid(row=0, column=0, padx=(15, 15), pady=(80, 0))
 
 homeButton = tk.Button(window, text="HOME", font=("Arial", 8), fg="white", bg="grey", width=23, height=2,
@@ -62,6 +62,12 @@ trainButton.grid(column=0, row=0, padx=(335, 130), pady=(6, 506))
 historyButton = tk.Button(window, text="HISTORY", font=("Arial", 8), fg="white", bg="grey", width=23, height=2,
                           command=lambda: toHistoryPage())
 historyButton.grid(column=0, row=0, padx=(665, 30), pady=(6, 506))
+
+newDataButton = tk.Button(window, text="INPUT NEW DATA", font=("Arial", 8), fg="white", bg="grey", width=23, height=1)
+newDataButton.grid(column=0, row=0, padx=(0, 780), pady=(620, 50))
+
+downloadButton = tk.Button(window, text="DOWNLOAD", font=("Arial", 8), fg="white", bg="grey", width=23, height=1)
+downloadButton.grid(column=0, row=0, padx=(200, 620), pady=(620, 50))
 
 
 window.mainloop()

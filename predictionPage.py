@@ -40,8 +40,8 @@ tk.Grid.columnconfigure(window, 0, weight=1)
 
 rectangle = tk.Canvas(width=1000, height=750)
 rectangle.create_rectangle(10, 70, 950, 20)
-rectangle.create_rectangle(10, 565, 950, 95)
-rectangle.create_rectangle(30, 505, 930, 115)
+rectangle.create_rectangle(10, 545, 950, 95)
+rectangle.create_rectangle(30, 485, 930, 115)
 rectangle.grid(row=0, column=0, padx=(15, 15), pady=(80, 0))
 
 homeButton = tk.Button(window, text="HOME", font=("Arial", 8), fg="white", bg="grey", width=23, height=2,
@@ -57,6 +57,15 @@ trainButton.grid(column=0, row=0, padx=(335, 130), pady=(6, 506))
 historyButton = tk.Button(window, text="HISTORY", font=("Arial", 8), fg="white", bg="grey", width=23, height=2,
                           command=lambda: toHistoryPage())
 historyButton.grid(column=0, row=0, padx=(665, 30), pady=(6, 506))
+
+importButton = tk.Button(window, text="IMPORT FILE", font=("Arial", 8), fg="white", bg="grey", width=18, height=2)
+importButton.grid(column=0, row=0, padx=(30, 850), pady=(620, 50))
+
+importText = tk.Label(window, text="(ONLY .xlsx FILES)", font=("Arial", 10))
+importText.grid(column=0, row=0, padx=(30, 850), pady=(680, 50))
+
+doPredictionButton = tk.Button(window, text="DO PREDICTION", font=("Arial", 8), fg="white", bg="grey", width=23, height=2)
+doPredictionButton.grid(column=0, row=0, padx=(400, 400), pady=(610, 50))
 
 window.mainloop()
 
