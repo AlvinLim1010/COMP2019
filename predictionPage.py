@@ -1,4 +1,6 @@
 import tkinter as tk
+from tkinter.filedialog import askopenfile
+from openpyxl import load_workbook
 
 window = tk.Tk()
 window.overrideredirect(False)
@@ -26,6 +28,20 @@ def toHomePage():
 def toHistoryPage():
     window.destroy()
     import historyPage
+
+
+def getExcel():
+    # global df
+
+    # import_file_path = filedialog.askopenfilename()
+    # df = pd.read_excel(import_file_path)
+    file = askopenfile(filetypes=[('Excel Files', '*.xlsx')])
+    wb = load_workbook(filename=file.name)  # Load into openpyxl
+    wb2 = wb.active
+
+    # messagebox.showinfo(' ', 'File uploaded successfully')
+    file_label = tk.Label(window, text='File Uploaded Successfully!', foreground='green')
+    file_label.grid(column=0, row=0, padx=(0, 800), pady=(660, 20))
 
 
 logOutLabel = tk.Button(window, text="LOG OUT", font=("Arial", 7), fg="white", bg="grey", width=10, height=2,
@@ -58,11 +74,11 @@ historyButton = tk.Button(window, text="HISTORY", font=("Arial", 8), fg="white",
                           command=lambda: toHistoryPage())
 historyButton.grid(column=0, row=0, padx=(665, 30), pady=(6, 506))
 
-importButton = tk.Button(window, text="IMPORT FILE", font=("Arial", 8), fg="white", bg="grey", width=18, height=2)
-importButton.grid(column=0, row=0, padx=(30, 850), pady=(620, 50))
+importButton = tk.Button(window, text="IMPORT FILE", command=getExcel, font=("Arial", 8), fg="white", bg="grey", width=18, height=2)
+importButton.grid(column=0, row=0, padx=(30, 850), pady=(610, 50))
 
 importText = tk.Label(window, text="(ONLY .xlsx FILES)", font=("Arial", 10))
-importText.grid(column=0, row=0, padx=(30, 850), pady=(680, 50))
+importText.grid(column=0, row=0, padx=(30, 850), pady=(650, 20))
 
 doPredictionButton = tk.Button(window, text="DO PREDICTION", font=("Arial", 8), fg="white", bg="grey", width=23, height=2)
 doPredictionButton.grid(column=0, row=0, padx=(400, 400), pady=(610, 50))
