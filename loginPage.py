@@ -1,4 +1,6 @@
 import tkinter as tk
+import tkinter.messagebox
+import mysql.connector
 
 window = tk.Tk()
 window.overrideredirect(False)
@@ -14,10 +16,17 @@ window.geometry("1000x750+{}+{}".format(positionRight, positionDown))
 
 
 def validateLogin(user_username, user_password):
-    if user_username == "admin" and user_password == "admin":
+    conn = mysql.connector.connect(host="localhost", port="3306", user="root", password="", database="project")
+    cursor = conn.cursor()
+    cursor.execute("SElECT * FROM admin WHERE username =%s AND pass = %s", [user_username, user_password])
+    record = cursor.fetchall()
+    if record:
         window.destroy()
         import homePage
-
+    else:
+        tkinter.messagebox.showerror("Error Login", "Invalid credentials!")
+    cursor.close()
+    conn.close()
 
 loginLabel = tk.Label(window, text="LOGIN", fg="white", bg="grey", width=100, height=4)
 loginLabel.grid(column=0, row=0, pady=20, padx=150)
