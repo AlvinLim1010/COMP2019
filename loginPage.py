@@ -12,7 +12,6 @@ positionDown = int(window.winfo_screenheight() / 5 - windowHeight / 2)
 window.title('Software')
 window.geometry("1000x750+{}+{}".format(positionRight, positionDown))
 
-
 def validateLogin(user_username, user_password):
     if user_username == "admin" and user_password == "admin":
         window.destroy()
