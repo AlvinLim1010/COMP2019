@@ -42,6 +42,7 @@ def getExcel():
     # messagebox.showinfo(' ', 'File uploaded successfully')
     file_label = tk.Label(window, text='File Uploaded Successfully!', foreground='green')
     file_label.grid(column=0, row=0, padx=(0, 800), pady=(660, 20))
+    file_label.after(3000, lambda: file_label.destroy())
 
 
 logOutLabel = tk.Button(window, text="LOG OUT", font=("Arial", 7), fg="white", bg="grey", width=10, height=2,
@@ -84,4 +85,3 @@ doPredictionButton = tk.Button(window, text="DO PREDICTION", font=("Arial", 8), 
 doPredictionButton.grid(column=0, row=0, padx=(400, 400), pady=(610, 50))
 
 window.mainloop()
-
