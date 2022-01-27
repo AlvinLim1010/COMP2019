@@ -1,5 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
+import mysql.connector
+import tkinter.messagebox
+from tkinter.filedialog import askopenfile
+from openpyxl import load_workbook
 
 TitleFont = ("Arial", 35)
 
@@ -56,23 +60,37 @@ class LoginPage(tk.Frame):
         titleLabel = ttk.Label(self, text="LOGIN", font=TitleFont)
         titleLabel.grid(column=0, row=0, pady=(0, 665))
 
-        label = tk.Label(self, text="Enter username:", font=("Arial", 12))
-        label.grid(column=0, row=0, pady=(200, 350))
+        usernameLabel = tk.Label(self, text="Enter username:", font=("Arial", 12))
+        usernameLabel.grid(column=0, row=0, pady=(200, 350))
 
         username = tk.StringVar()
-        nameEntered = tk.Entry(self, width=30, textvariable=username)
-        nameEntered.grid(column=0, row=0, pady=(220, 320))
+        usernameEntered = tk.Entry(self, width=30, textvariable=username)
+        usernameEntered.grid(column=0, row=0, pady=(220, 320))
 
-        label = tk.Label(self, text="Enter password:", font=("Arial", 12))
-        label.grid(column=0, row=0, pady=(300, 280))
+        passwordLabel = tk.Label(self, text="Enter password:", font=("Arial", 12))
+        passwordLabel.grid(column=0, row=0, pady=(300, 280))
 
         password = tk.StringVar()
-        nameEntered = tk.Entry(self, width=30, textvariable=password, show="*")
-        nameEntered.grid(column=0, row=0, pady=(320, 240))
+        passwordEntered = tk.Entry(self, width=30, textvariable=password, show="*")
+        passwordEntered.grid(column=0, row=0, pady=(320, 240))
 
         logInButton = tk.Button(self, text="LOGIN", font=("Arial", 10), fg="white", bg="grey", width=15, height=1
-                                , command=lambda: controller.show_frame(HomePage))
+                                , command=lambda: validateLogin(username.get(), password.get()))
         logInButton.grid(column=0, row=0, pady=(400, 230))
+
+        def validateLogin(user_username, user_password):
+            conn = mysql.connector.connect(host="localhost", port="3306", user="root", password="", database="project")
+            cursor = conn.cursor()
+            cursor.execute("SElECT * FROM admin WHERE username =%s AND pass = %s", [user_username, user_password])
+            record = cursor.fetchall()
+            usernameEntered.delete(0, 'end')
+            passwordEntered.delete(0, 'end')
+            if record:
+                controller.show_frame(HomePage)
+            else:
+                tkinter.messagebox.showerror("Error Login", "Invalid credentials!")
+            cursor.close()
+            conn.close()
 
 
 class HomePage(tk.Frame):
@@ -112,6 +130,15 @@ class PredictionPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
+        def getExcel():
+            file = askopenfile(filetypes=[('Excel Files', '*.xlsx')])
+            wb = load_workbook(filename=file.name)
+            wb2 = wb.active
+
+            file_label = tk.Label(self, text='File Uploaded Successfully!', foreground='green')
+            file_label.grid(column=0, row=0, padx=(10, 600), pady=(680, 15))
+            file_label.after(3000, lambda: file_label.destroy())
+
         rectangle = tk.Canvas(self, width=760, height=760)
         rectangle.create_rectangle(15, 135, 740, 85)
         rectangle.create_rectangle(15, 645, 740, 160)
@@ -137,7 +164,7 @@ class PredictionPage(tk.Frame):
         historyButton = ttk.Button(self, text="HISTORY", command=lambda: controller.show_frame(HistoryPage))
         historyButton.grid(column=0, row=0, padx=(625, 30), pady=(0, 540))
 
-        importButton = tk.Button(self, text="IMPORT FILE", fg="white", bg="grey", width=15, height=2)
+        importButton = tk.Button(self, text="IMPORT FILE", command=getExcel, fg="white", bg="grey", width=15, height=2)
         importButton.grid(column=0, row=0, padx=(10, 630), pady=(620, 20))
 
         importText = tk.Label(self, text="(ONLY .xlsx FILES)", font=("Arial", 10))
