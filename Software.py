@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 import mysql.connector
-import tkinter.messagebox
 from tkinter.filedialog import askopenfile
 from openpyxl import load_workbook
 
@@ -85,10 +84,12 @@ class LoginPage(tk.Frame):
             record = cursor.fetchall()
             usernameEntered.delete(0, 'end')
             passwordEntered.delete(0, 'end')
+            invalidLabel = tk.Label(self, text="                                               ", foreground='red', font=13)
+            invalidLabel.grid(column=0, row=0, pady=(450, 150))
             if record:
                 controller.show_frame(HomePage)
             else:
-                tkinter.messagebox.showerror("Error Login", "Invalid credentials!")
+                invalidLabel.configure(text="Invalid login, please try again")
             cursor.close()
             conn.close()
 
@@ -132,8 +133,8 @@ class PredictionPage(tk.Frame):
 
         def getExcel():
             file = askopenfile(filetypes=[('Excel Files', '*.xlsx')])
-            wb = load_workbook(filename=file.name)
-            wb2 = wb.active
+            inputExcelFile = load_workbook(filename=file.name)
+            inputExcelFile2 =  inputExcelFile.active
 
             file_label = tk.Label(self, text='File Uploaded Successfully!', foreground='green')
             file_label.grid(column=0, row=0, padx=(10, 600), pady=(680, 15))
@@ -171,7 +172,7 @@ class PredictionPage(tk.Frame):
         importText.grid(column=0, row=0, padx=(10, 630), pady=(680, 20))
 
         doPredictionButton = tk.Button(self, text="DO PREDICTION", fg="white", bg="grey", width=15, height=2,
-                                       command=lambda : controller.show_frame(OutputPage))
+                                       command=lambda: controller.show_frame(OutputPage))
         doPredictionButton.grid(column=0, row=0, padx=(200, 200), pady=(610, 20))
 
 
