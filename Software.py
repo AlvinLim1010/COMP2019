@@ -3,6 +3,7 @@ from tkinter import ttk
 import mysql.connector
 from tkinter.filedialog import askopenfile
 from openpyxl import load_workbook
+from tkinter import *
 
 TitleFont = ("Arial", 35)
 
@@ -51,31 +52,56 @@ class LoginPage(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         rectangle = tk.Canvas(self, width=760, height=760)
-        rectangle.create_line(15, 120, 745, 120)
-        rectangle.create_rectangle(220, 500, 540, 270)
-        rectangle.create_line(15, 600, 745, 600)
+        # rectangle.create_line(15, 120, 745, 120)
+        rectangle.create_rectangle(220, 550, 540, 160)
+        # rectangle.create_line(15, 600, 745, 600)
         rectangle.grid(row=0, column=0)
 
-        titleLabel = ttk.Label(self, text="LOGIN", font=TitleFont)
-        titleLabel.grid(column=0, row=0, pady=(0, 665))
+        def bttn(x, y, text, bcolor, fcolor,cmd):
 
-        usernameLabel = tk.Label(self, text="Enter username:", font=("Arial", 12))
-        usernameLabel.grid(column=0, row=0, pady=(200, 350))
+            def on_enter(e):
+                mybutton['background'] = bcolor
+                mybutton['foreground'] = fcolor
+
+            def on_leave(e):
+                mybutton['background'] = fcolor
+                mybutton['foreground'] = bcolor
+
+            mybutton = Button(width=15, height=1, text=text,
+                              fg=bcolor,
+                              bg=fcolor,
+                              border=0,
+                              font= ("Raleway",12),
+                              activeforeground=fcolor,
+                              activebackground=bcolor,
+                              command=cmd)
+
+            mybutton.bind("<Enter>", on_enter)
+            mybutton.bind("<Leave>", on_leave)
+
+            mybutton.place(x=x, y=y)
+
+        titleLabel = ttk.Label(self, text="LOGIN", font=("Raleway", 26))
+        titleLabel.grid(column=0, row=0, pady=(150, 460))
+
+        usernameLabel = tk.Label(self, text="Username", font=("Raleway", 10), fg="grey")
+        usernameLabel.grid(column=0, row=0, padx=(0, 120), pady=(200, 370))
 
         username = tk.StringVar()
         usernameEntered = tk.Entry(self, width=30, textvariable=username)
-        usernameEntered.grid(column=0, row=0, pady=(220, 320))
+        usernameEntered.grid(column=0, row=0, padx=(0, 0), pady=(220, 350))
 
-        passwordLabel = tk.Label(self, text="Enter password:", font=("Arial", 12))
-        passwordLabel.grid(column=0, row=0, pady=(300, 280))
+        passwordLabel = tk.Label(self, text="Password", font=("Raleway", 10), fg="grey")
+        passwordLabel.grid(column=0, row=0, padx=(0, 120), pady=(300, 330))
 
         password = tk.StringVar()
         passwordEntered = tk.Entry(self, width=30, textvariable=password, show="*")
-        passwordEntered.grid(column=0, row=0, pady=(320, 240))
+        passwordEntered.grid(column=0, row=0, pady=(320, 310))
 
-        logInButton = tk.Button(self, text="LOGIN", font=("Arial", 10), fg="white", bg="grey", width=15, height=1
-                                , command=lambda: validateLogin(username.get(), password.get()))
-        logInButton.grid(column=0, row=0, pady=(400, 230))
+        # logInButton = tk.Button(self, text="LOGIN", font=("Arial", 10), fg="white", bg="grey", width=15, height=1
+        #                         , command=lambda: validateLogin(username.get(), password.get()))
+        logInButton = bttn(310, 460, "Login", '#ffcc66', "#141414", lambda: validateLogin(username.get(), password.get()))
+        # logInButton.grid(column=0, row=0, pady=(400, 230))
 
         def validateLogin(user_username, user_password):
             conn = mysql.connector.connect(host="localhost", port="3306", user="root", password="", database="project")
