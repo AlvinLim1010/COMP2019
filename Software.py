@@ -2,9 +2,19 @@ import tkinter as tk
 from tkinter import ttk
 import mysql.connector
 from tkinter.filedialog import askopenfile
+from openpyxl import Workbook
 from openpyxl import load_workbook
+from POMEMatlabAI import excelNeuralNetworkPOME
+from datetime import datetime
 
 TitleFont = ("Arial", 35)
+APP_WIDTH = 760
+APP_HEIGHT = 760
+neuralNetworkPath = "C:\\Users\\User\\Desktop\\Year 2 Stuff (2nd Semester)\\pre_trained_net.mat"
+SAVE_LOCATION = ""
+numOfRows = 30
+outputPath = "C:\\Users\\User\\Desktop\\Year 2 Stuff (2nd Semester)\\outputTest"
+outputFileName = "testOutput.xlsx"
 
 
 class tkinterApp(tk.Tk):
@@ -17,13 +27,11 @@ class tkinterApp(tk.Tk):
         self.resizable(0, 0)
         windowWidth = self.winfo_screenwidth()
         windowHeight = self.winfo_screenheight()
-        appWidth = 760
-        appHeight = 760
 
-        x = int((windowWidth / 2) - (appWidth / 2))
-        y = int((windowHeight / 2) - (appHeight / 2))
+        x = int((windowWidth / 2) - (APP_WIDTH / 2))
+        y = int((windowHeight / 2) - (APP_HEIGHT / 2))
 
-        self.geometry("{}x{}+{}+{}".format(appWidth, appHeight, x, y))
+        self.geometry("{}x{}+{}+{}".format(APP_WIDTH, APP_HEIGHT, x, y))
 
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
@@ -130,15 +138,37 @@ class HomePage(tk.Frame):
 class PredictionPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-
+        self.predictionRequest = excelNeuralNetworkPOME(neuralNetworkPath)
+        self.predictionRequest.activeFile = ""
         def getExcel():
-            file = askopenfile(filetypes=[('Excel Files', '*.xlsx')])
-            inputExcelFile = load_workbook(filename=file.name)
-            inputExcelFile2 =  inputExcelFile.active
+            self.predictionRequest.activeFile = askopenfile(filetypes=[('Excel Files', '*.xlsx')])
+            self.predictionRequest.inputExcelFile = load_workbook(filename=self.predictionRequest.activeFile.name)
+            self.predictionRequest.activeWorksheet = self.predictionRequest.inputExcelFile.active
 
             file_label = tk.Label(self, text='File Uploaded Successfully!', foreground='green')
             file_label.grid(column=0, row=0, padx=(10, 600), pady=(680, 15))
             file_label.after(3000, lambda: file_label.destroy())
+
+        def performPrediction():
+            filePath = self.predictionRequest.activeFile.name
+            print(filePath)
+            print(self.predictionRequest.matPath)
+            out = self.predictionRequest.predict(filePath, numOfRows)
+            saveOut2Excel(out)
+            controller.show_frame(OutputPage)
+
+        def saveOut2Excel(output):
+            wb = Workbook()
+            ws = wb.active
+            outputFileName = getDateTime()
+            for row in output:
+                ws.append(row)
+            wb.save(filename=outputPath+"\\"+outputFileName+".xlsx")
+
+        def getDateTime():
+            currentDateTime = datetime.now()
+            dateTimeStr = currentDateTime.strftime("Output %d-%m-%Y %H%M%S")
+            return dateTimeStr
 
         rectangle = tk.Canvas(self, width=760, height=760)
         rectangle.create_rectangle(15, 135, 740, 85)
@@ -171,14 +201,35 @@ class PredictionPage(tk.Frame):
         importText = tk.Label(self, text="(ONLY .xlsx FILES)", font=("Arial", 10))
         importText.grid(column=0, row=0, padx=(10, 630), pady=(680, 20))
 
-        doPredictionButton = tk.Button(self, text="DO PREDICTION", fg="white", bg="grey", width=15, height=2,
-                                       command=lambda: controller.show_frame(OutputPage))
+        doPredictionButton = tk.Button(self, text="DO PREDICTION", fg="white", bg="grey", width=15, height=2,command=lambda: performPrediction())
         doPredictionButton.grid(column=0, row=0, padx=(200, 200), pady=(610, 20))
+
+        numOfRowLabel = tk.Label(self, text="Enter the Number Of Rows:", font=("Arial", 12))
+        numOfRowLabel.grid(column=0, row=0, padx=(530, 30), pady=(600, 20))
+
+        numOfRow = tk.IntVar()
+        numOfRowEntered = tk.Entry(self, width=20, textvariable=numOfRow)
+        numOfRowEntered.grid(column=0, row=0, padx=(530, 30), pady=(650, 20))
+
 
 
 class TrainingPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        self.trainingRequest = excelNeuralNetworkPOME(neuralNetworkPath)
+        self.trainingRequest.activeFile = ""
+        def getExcel():
+            self.trainingRequest.activeFile = askopenfile(filetypes=[('Excel Files', '*.xlsx')])
+            self.trainingRequest.inputExcelFile = load_workbook(filename=self.trainingRequest.activeFile.name)
+            self.trainingRequest.activeWorksheet = self.trainingRequest.inputExcelFile.active
+
+            file_label = tk.Label(self, text='File Uploaded Successfully!', foreground='green')
+            file_label.grid(column=0, row=0, padx=(10, 600), pady=(680, 15))
+            file_label.after(3000, lambda: file_label.destroy())
+
+        def trainAndReplace():
+            filePath = self.trainingRequest.activeFile.name
+            self.trainingRequest.train(filePath, numOfRows)
 
         rectangle = tk.Canvas(self, width=760, height=760)
         rectangle.create_rectangle(15, 135, 740, 85)
@@ -205,13 +256,13 @@ class TrainingPage(tk.Frame):
         historyButton = ttk.Button(self, text="HISTORY", command=lambda: controller.show_frame(HistoryPage))
         historyButton.grid(column=0, row=0, padx=(625, 30), pady=(0, 540))
 
-        importButton = tk.Button(self, text="IMPORT FILE", fg="white", bg="grey", width=15, height=2)
+        importButton = tk.Button(self, text="IMPORT FILE", fg="white", bg="grey", width=15, height=2, command=getExcel)
         importButton.grid(column=0, row=0, padx=(10, 630), pady=(620, 20))
 
         importText = tk.Label(self, text="(ONLY .xlsx FILES)", font=("Arial", 10))
         importText.grid(column=0, row=0, padx=(10, 630), pady=(680, 20))
 
-        doTrainingButton = tk.Button(self, text="DO TRAINING", fg="white", bg="grey", width=15, height=2)
+        doTrainingButton = tk.Button(self, text="DO TRAINING", fg="white", bg="grey", width=15, height=2, command=trainAndReplace)
         doTrainingButton.grid(column=0, row=0, padx=(200, 200), pady=(610, 20))
 
 
