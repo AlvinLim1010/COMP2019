@@ -1,9 +1,10 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
+from tkinter import *
 import mysql.connector
 from tkinter.filedialog import askopenfile
 from openpyxl import load_workbook
-from tkinter import *
+from PIL import Image, ImageTk
 
 TitleFont = ("Arial", 35)
 
@@ -51,57 +52,42 @@ class LoginPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
+        # Background image
+        bg = Image.open("Pictures/login.png")
+        resizebg = bg.resize((760, 760), Image.ANTIALIAS)
+        self.newbg = ImageTk.PhotoImage(resizebg)
+
         rectangle = tk.Canvas(self, width=760, height=760)
-        # rectangle.create_line(15, 120, 745, 120)
-        rectangle.create_rectangle(220, 550, 540, 160)
-        # rectangle.create_line(15, 600, 745, 600)
+        rectangle.create_rectangle(220, 500, 540, 270)
+        rectangle.create_image(0, 0, image=self.newbg, anchor=NW)
+        rectangle.create_text(385, 230, text="LOGIN", fill="#00557E", font=('Raleway', 30, 'bold'))
+        rectangle.create_text(325, 295, text="Username", fill="black", font=('Raleway', 11))
+        rectangle.create_text(325, 365, text="Password", fill="black", font=('Raleway', 11))
         rectangle.grid(row=0, column=0)
-
-        def bttn(x, y, text, bcolor, fcolor,cmd):
-
-            def on_enter(e):
-                mybutton['background'] = bcolor
-                mybutton['foreground'] = fcolor
-
-            def on_leave(e):
-                mybutton['background'] = fcolor
-                mybutton['foreground'] = bcolor
-
-            mybutton = Button(width=15, height=1, text=text,
-                              fg=bcolor,
-                              bg=fcolor,
-                              border=0,
-                              font= ("Raleway",12),
-                              activeforeground=fcolor,
-                              activebackground=bcolor,
-                              command=cmd)
-
-            mybutton.bind("<Enter>", on_enter)
-            mybutton.bind("<Leave>", on_leave)
-
-            mybutton.place(x=x, y=y)
-
-        titleLabel = ttk.Label(self, text="LOGIN", font=("Raleway", 26))
-        titleLabel.grid(column=0, row=0, pady=(150, 460))
-
-        usernameLabel = tk.Label(self, text="Username", font=("Raleway", 10), fg="grey")
-        usernameLabel.grid(column=0, row=0, padx=(0, 120), pady=(200, 370))
 
         username = tk.StringVar()
         usernameEntered = tk.Entry(self, width=30, textvariable=username)
         usernameEntered.grid(column=0, row=0, padx=(0, 0), pady=(220, 350))
 
-        passwordLabel = tk.Label(self, text="Password", font=("Raleway", 10), fg="grey")
-        passwordLabel.grid(column=0, row=0, padx=(0, 120), pady=(300, 330))
-
         password = tk.StringVar()
         passwordEntered = tk.Entry(self, width=30, textvariable=password, show="*")
         passwordEntered.grid(column=0, row=0, pady=(320, 310))
 
-        # logInButton = tk.Button(self, text="LOGIN", font=("Arial", 10), fg="white", bg="grey", width=15, height=1
-        #                         , command=lambda: validateLogin(username.get(), password.get()))
-        logInButton = bttn(310, 460, "Login", '#ffcc66', "#141414", lambda: validateLogin(username.get(), password.get()))
-        # logInButton.grid(column=0, row=0, pady=(400, 230))
+        # Define functions
+        def on_enter(e):
+            button.config(background='#00557E', foreground="white")
+
+        def on_leave(e):
+            button.config(background='SystemButtonFace', foreground='black')
+
+        # Create a Button
+        button = tk.Button(self, text="Login", font=('Raleway', 11), width=10, height=0, bd=0,
+                           command=lambda: validateLogin(username.get(), password.get()))
+        button.grid(column=0, row=0, pady=(400, 230))
+
+        # Bind the Enter and Leave Events to the Button
+        button.bind('<Enter>', on_enter)
+        button.bind('<Leave>', on_leave)
 
         def validateLogin(user_username, user_password):
             conn = mysql.connector.connect(host="localhost", port="3306", user="root", password="", database="project")
@@ -110,12 +96,10 @@ class LoginPage(tk.Frame):
             record = cursor.fetchall()
             usernameEntered.delete(0, 'end')
             passwordEntered.delete(0, 'end')
-            invalidLabel = tk.Label(self, text="                                               ", foreground='red', font=13)
-            invalidLabel.grid(column=0, row=0, pady=(450, 150))
             if record:
                 controller.show_frame(HomePage)
             else:
-                invalidLabel.configure(text="Invalid login, please try again")
+                messagebox.showinfo("Invalid login!", "Invalid credentials")
             cursor.close()
             conn.close()
 
@@ -124,33 +108,35 @@ class HomePage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
-        rectangle = tk.Canvas(self, width=760, height=760)
-        rectangle.create_rectangle(15, 135, 740, 85)
-        rectangle.create_line(15, 191, 155, 191)
-        rectangle.create_rectangle(15, 740, 740, 200)
+        # Background image
+        bg = Image.open("Pictures/template.png")
+        resizebg = bg.resize((760, 760), Image.ANTIALIAS)
+
+        self.newbg = ImageTk.PhotoImage(resizebg)
+        rectangle = tk.Canvas(self, width=760, height=930)
+        rectangle.create_image(0, 0, image=self.newbg, anchor=NW)
+        rectangle.create_text(425, 22, text="H O M E", fill="White", font=('Raleway', 20, 'bold'))
         rectangle.grid(row=0, column=0)
 
-        logOutButton = tk.Button(self, text="LOG OUT", fg="white", bg="grey", width=15, height=1
+        logOutButton = tk.Button(self, text="LOG OUT", fg="black", bg="white", width=10, height=1, bd=0
                                  , command=lambda: controller.show_frame(LoginPage))
-        logOutButton.grid(column=0, row=0, padx=(630, 0), pady=(0, 720))
+        logOutButton.grid(column=0, row=0, padx=(630, 0), pady=(0, 885))
 
-        titleLabel = ttk.Label(self, text="HOME PAGE", font=TitleFont)
-        titleLabel.grid(column=0, row=0, pady=(0, 665))
+        homeButton = tk.Button(self, text="HOME", width=10, height=1, bd=0,
+                               command=lambda: controller.show_frame(HomePage))
+        homeButton.grid(column=0, row=0, padx=(0, 625), pady=(0, 440))
 
-        homeButton = ttk.Button(self, text="HOME", command=lambda: controller.show_frame(HomePage))
-        homeButton.grid(column=0, row=0, padx=(10, 625), pady=(0, 540))
+        predictButton = tk.Button(self, text="PREDICT", width=10, height=1, bd=0,
+                                  command=lambda: controller.show_frame(PredictionPage))
+        predictButton.grid(column=0, row=0, padx=(0, 625), pady=(100, 390))
 
-        predictButton = ttk.Button(self, text="PREDICT", command=lambda: controller.show_frame(PredictionPage))
-        predictButton.grid(column=0, row=0, padx=(110, 335), pady=(0, 540))
+        trainButton = tk.Button(self, text="TRAIN", width=10, height=1, bd=0,
+                                command=lambda: controller.show_frame(TrainingPage))
+        trainButton.grid(column=0, row=0, padx=(0, 625), pady=(200, 340))
 
-        trainButton = ttk.Button(self, text="TRAIN", command=lambda: controller.show_frame(TrainingPage))
-        trainButton.grid(column=0, row=0, padx=(335, 130), pady=(0, 540))
-
-        historyButton = ttk.Button(self, text="HISTORY", command=lambda: controller.show_frame(HistoryPage))
-        historyButton.grid(column=0, row=0, padx=(625, 30), pady=(0, 540))
-
-        instructionLabel = tk.Label(self, text="INSTRUCTIONS", font=("Arial", 15))
-        instructionLabel.grid(column=0, row=0, padx=(10, 600), pady=(0, 410))
+        historyButton = tk.Button(self, text="HISTORY", width=10, height=1, bd=0,
+                                  command=lambda: controller.show_frame(HistoryPage))
+        historyButton.grid(column=0, row=0, padx=(0, 625), pady=(300, 290))
 
 
 class PredictionPage(tk.Frame):
@@ -160,114 +146,127 @@ class PredictionPage(tk.Frame):
         def getExcel():
             file = askopenfile(filetypes=[('Excel Files', '*.xlsx')])
             inputExcelFile = load_workbook(filename=file.name)
-            inputExcelFile2 =  inputExcelFile.active
+            inputExcelFile2 = inputExcelFile.active
 
             file_label = tk.Label(self, text='File Uploaded Successfully!', foreground='green')
             file_label.grid(column=0, row=0, padx=(10, 600), pady=(680, 15))
             file_label.after(3000, lambda: file_label.destroy())
 
-        rectangle = tk.Canvas(self, width=760, height=760)
-        rectangle.create_rectangle(15, 135, 740, 85)
-        rectangle.create_rectangle(15, 645, 740, 160)
-        rectangle.create_rectangle(35, 585, 720, 175)
+        # Background image
+        bg = Image.open("Pictures/template.png")
+        resizebg = bg.resize((760, 760), Image.ANTIALIAS)
+
+        self.newbg = ImageTk.PhotoImage(resizebg)
+        rectangle = tk.Canvas(self, width=760, height=930)
+        rectangle.create_image(0, 0, image=self.newbg, anchor=NW)
+        rectangle.create_text(425, 22, text="P R E D I C T I O N", fill="White", font=('Raleway', 20, 'bold'))
+        rectangle.create_text(195, 745, text="(ONLY .xlsx FILES)", fill="White", font=('Raleway', 10))
         rectangle.grid(row=0, column=0)
 
-        logOutButton = tk.Button(self, text="LOG OUT", fg="white", bg="grey", width=15, height=1
-                                 , command=lambda: controller.show_frame(LoginPage))
-        logOutButton.grid(column=0, row=0, padx=(630, 0), pady=(0, 720))
+        logOutButton = tk.Button(self, text="LOG OUT", fg="black", bg="white", width=10, height=1, bd=0,
+                                 command=lambda: controller.show_frame(LoginPage))
+        logOutButton.grid(column=0, row=0, padx=(630, 0), pady=(0, 885))
 
-        titleLabel = ttk.Label(self, text="PREDICTION PAGE", font=TitleFont)
-        titleLabel.grid(column=0, row=0, pady=(0, 665))
+        homeButton = tk.Button(self, text="HOME", width=10, height=1, bd=0,
+                               command=lambda: controller.show_frame(HomePage))
+        homeButton.grid(column=0, row=0, padx=(0, 625), pady=(0, 440))
 
-        homeButton = ttk.Button(self, text="HOME", command=lambda: controller.show_frame(HomePage))
-        homeButton.grid(column=0, row=0, padx=(10, 625), pady=(0, 540))
+        predictButton = tk.Button(self, text="PREDICT", width=10, height=1, bd=0,
+                                  command=lambda: controller.show_frame(PredictionPage))
+        predictButton.grid(column=0, row=0, padx=(0, 625), pady=(100, 390))
 
-        predictButton = ttk.Button(self, text="PREDICT", command=lambda: controller.show_frame(PredictionPage))
-        predictButton.grid(column=0, row=0, padx=(110, 335), pady=(0, 540))
+        trainButton = tk.Button(self, text="TRAIN", width=10, height=1, bd=0,
+                                command=lambda: controller.show_frame(TrainingPage))
+        trainButton.grid(column=0, row=0, padx=(0, 625), pady=(200, 340))
 
-        trainButton = ttk.Button(self, text="TRAIN", command=lambda: controller.show_frame(TrainingPage))
-        trainButton.grid(column=0, row=0, padx=(335, 130), pady=(0, 540))
+        historyButton = tk.Button(self, text="HISTORY", width=10, height=1, bd=0,
+                                  command=lambda: controller.show_frame(HistoryPage))
+        historyButton.grid(column=0, row=0, padx=(0, 625), pady=(300, 290))
 
-        historyButton = ttk.Button(self, text="HISTORY", command=lambda: controller.show_frame(HistoryPage))
-        historyButton.grid(column=0, row=0, padx=(625, 30), pady=(0, 540))
+        importButton = tk.Button(self, text="IMPORT FILE", command=getExcel, fg="black", bg="white", width=10, height=1)
+        importButton.grid(column=0, row=0, padx=(10, 380), pady=(520, 20))
 
-        importButton = tk.Button(self, text="IMPORT FILE", command=getExcel, fg="white", bg="grey", width=15, height=2)
-        importButton.grid(column=0, row=0, padx=(10, 630), pady=(620, 20))
-
-        importText = tk.Label(self, text="(ONLY .xlsx FILES)", font=("Arial", 10))
-        importText.grid(column=0, row=0, padx=(10, 630), pady=(680, 20))
-
-        doPredictionButton = tk.Button(self, text="DO PREDICTION", fg="white", bg="grey", width=15, height=2,
+        doPredictionButton = tk.Button(self, text="DO PREDICTION", fg="black", bg="white", width=13, height=1,
                                        command=lambda: controller.show_frame(OutputPage))
-        doPredictionButton.grid(column=0, row=0, padx=(200, 200), pady=(610, 20))
+        doPredictionButton.grid(column=0, row=0, padx=(200, 100), pady=(520, 20))
 
 
 class TrainingPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
-        rectangle = tk.Canvas(self, width=760, height=760)
-        rectangle.create_rectangle(15, 135, 740, 85)
-        rectangle.create_rectangle(15, 645, 740, 160)
-        rectangle.create_rectangle(35, 585, 720, 175)
+        # Background image
+        bg = Image.open("Pictures/template.png")
+        resizebg = bg.resize((760, 760), Image.ANTIALIAS)
+
+        self.newbg = ImageTk.PhotoImage(resizebg)
+        rectangle = tk.Canvas(self, width=760, height=930)
+        rectangle.create_image(0, 0, image=self.newbg, anchor=NW)
+        rectangle.create_text(425, 22, text="T R A I N I N G", fill="White", font=('Raleway', 20, 'bold'))
+        rectangle.create_text(195, 745, text="(ONLY .xlsx FILES)", fill="White", font=('Raleway', 10))
         rectangle.grid(row=0, column=0)
 
-        logOutButton = tk.Button(self, text="LOG OUT", fg="white", bg="grey", width=15, height=1
-                                 , command=lambda: controller.show_frame(LoginPage))
-        logOutButton.grid(column=0, row=0, padx=(630, 0), pady=(0, 720))
+        logOutButton = tk.Button(self, text="LOG OUT", fg="black", bg="white", width=10, height=1, bd=0,
+                                 command=lambda: controller.show_frame(LoginPage))
+        logOutButton.grid(column=0, row=0, padx=(630, 0), pady=(0, 885))
 
-        titleLabel = ttk.Label(self, text="TRAINING PAGE", font=TitleFont)
-        titleLabel.grid(column=0, row=0, pady=(0, 665))
+        homeButton = tk.Button(self, text="HOME", width=10, height=1, bd=0,
+                               command=lambda: controller.show_frame(HomePage))
+        homeButton.grid(column=0, row=0, padx=(0, 625), pady=(0, 440))
 
-        homeButton = ttk.Button(self, text="HOME", command=lambda: controller.show_frame(HomePage))
-        homeButton.grid(column=0, row=0, padx=(10, 625), pady=(0, 540))
+        predictButton = tk.Button(self, text="PREDICT", width=10, height=1, bd=0,
+                                  command=lambda: controller.show_frame(PredictionPage))
+        predictButton.grid(column=0, row=0, padx=(0, 625), pady=(100, 390))
 
-        predictButton = ttk.Button(self, text="PREDICT", command=lambda: controller.show_frame(PredictionPage))
-        predictButton.grid(column=0, row=0, padx=(110, 335), pady=(0, 540))
+        trainButton = tk.Button(self, text="TRAIN", width=10, height=1, bd=0,
+                                command=lambda: controller.show_frame(TrainingPage))
+        trainButton.grid(column=0, row=0, padx=(0, 625), pady=(200, 340))
 
-        trainButton = ttk.Button(self, text="TRAIN", command=lambda: controller.show_frame(TrainingPage))
-        trainButton.grid(column=0, row=0, padx=(335, 130), pady=(0, 540))
+        historyButton = tk.Button(self, text="HISTORY", width=10, height=1, bd=0,
+                                  command=lambda: controller.show_frame(HistoryPage))
+        historyButton.grid(column=0, row=0, padx=(0, 625), pady=(300, 290))
 
-        historyButton = ttk.Button(self, text="HISTORY", command=lambda: controller.show_frame(HistoryPage))
-        historyButton.grid(column=0, row=0, padx=(625, 30), pady=(0, 540))
+        importButton = tk.Button(self, text="IMPORT FILE", fg="black", bg="white", width=10, height=1)
+        importButton.grid(column=0, row=0, padx=(10, 380), pady=(520, 20))
 
-        importButton = tk.Button(self, text="IMPORT FILE", fg="white", bg="grey", width=15, height=2)
-        importButton.grid(column=0, row=0, padx=(10, 630), pady=(620, 20))
-
-        importText = tk.Label(self, text="(ONLY .xlsx FILES)", font=("Arial", 10))
-        importText.grid(column=0, row=0, padx=(10, 630), pady=(680, 20))
-
-        doTrainingButton = tk.Button(self, text="DO TRAINING", fg="white", bg="grey", width=15, height=2)
-        doTrainingButton.grid(column=0, row=0, padx=(200, 200), pady=(610, 20))
+        doPredictionButton = tk.Button(self, text="DO TRAINING", fg="black", bg="white", width=13, height=1,
+                                       command=lambda: controller.show_frame(OutputPage))
+        doPredictionButton.grid(column=0, row=0, padx=(200, 100), pady=(520, 20))
 
 
 class HistoryPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
-        rectangle = tk.Canvas(self, width=760, height=760)
-        rectangle.create_rectangle(15, 135, 740, 85)
-        rectangle.create_rectangle(15, 720, 740, 160)
+        # Background image
+        bg = Image.open("Pictures/template.png")
+        resizebg = bg.resize((760, 760), Image.ANTIALIAS)
+
+        self.newbg = ImageTk.PhotoImage(resizebg)
+        rectangle = tk.Canvas(self, width=760, height=930)
+        rectangle.create_image(0, 0, image=self.newbg, anchor=NW)
+        rectangle.create_text(425, 22, text="H I S T O R Y", fill="White", font=('Raleway', 20, 'bold'))
         rectangle.grid(row=0, column=0)
 
-        logOutButton = tk.Button(self, text="LOG OUT", fg="white", bg="grey", width=15, height=1
+        logOutButton = tk.Button(self, text="LOG OUT", fg="black", bg="white", width=10, height=1, bd=0
                                  , command=lambda: controller.show_frame(LoginPage))
-        logOutButton.grid(column=0, row=0, padx=(630, 0), pady=(0, 720))
+        logOutButton.grid(column=0, row=0, padx=(630, 0), pady=(0, 885))
 
-        titleLabel = ttk.Label(self, text="HISTORY PAGE", font=TitleFont)
-        titleLabel.grid(column=0, row=0, pady=(0, 665))
+        homeButton = tk.Button(self, text="HOME", width=10, height=1, bd=0,
+                               command=lambda: controller.show_frame(HomePage))
+        homeButton.grid(column=0, row=0, padx=(0, 625), pady=(0, 440))
 
-        homeButton = ttk.Button(self, text="HOME", command=lambda: controller.show_frame(HomePage))
-        homeButton.grid(column=0, row=0, padx=(10, 625), pady=(0, 540))
+        predictButton = tk.Button(self, text="PREDICT", width=10, height=1, bd=0,
+                                  command=lambda: controller.show_frame(PredictionPage))
+        predictButton.grid(column=0, row=0, padx=(0, 625), pady=(100, 390))
 
-        predictButton = ttk.Button(self, text="PREDICT", command=lambda: controller.show_frame(PredictionPage))
-        predictButton.grid(column=0, row=0, padx=(110, 335), pady=(0, 540))
+        trainButton = tk.Button(self, text="TRAIN", width=10, height=1, bd=0,
+                                command=lambda: controller.show_frame(TrainingPage))
+        trainButton.grid(column=0, row=0, padx=(0, 625), pady=(200, 340))
 
-        trainButton = ttk.Button(self, text="TRAIN", command=lambda: controller.show_frame(TrainingPage))
-        trainButton.grid(column=0, row=0, padx=(335, 130), pady=(0, 540))
-
-        historyButton = ttk.Button(self, text="HISTORY", command=lambda: controller.show_frame(HistoryPage))
-        historyButton.grid(column=0, row=0, padx=(625, 30), pady=(0, 540))
+        historyButton = tk.Button(self, text="HISTORY", width=10, height=1, bd=0,
+                                  command=lambda: controller.show_frame(HistoryPage))
+        historyButton.grid(column=0, row=0, padx=(0, 625), pady=(300, 290))
 
 
 class OutputPage(tk.Frame):
