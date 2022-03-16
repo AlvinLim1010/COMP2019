@@ -153,6 +153,23 @@ class PredictionPage(tk.Frame):
                                   activeforeground="#DDAA85", command=lambda: controller.show_frame(HistoryPage))
         historyButton.grid(column=0, row=0, padx=(0, 840), pady=(300, 100))
 
+        input1 = tk.StringVar()
+        input2 = tk.StringVar()
+        input3 = tk.StringVar()
+        input4 = tk.StringVar()
+        input5 = tk.StringVar()
+        input6 = tk.StringVar()
+        input7 = tk.StringVar()
+        input8 = tk.StringVar()
+        input9 = tk.StringVar()
+        input10 = tk.StringVar()
+        input11 = tk.StringVar()
+        input12 = tk.StringVar()
+        input13 = tk.StringVar()
+        input14 = tk.StringVar()
+        input15 = tk.StringVar()
+        input16 = tk.StringVar()
+
         def clear():
             input1.set("")
             input2.set("")
@@ -175,7 +192,6 @@ class PredictionPage(tk.Frame):
         input1Entered = tk.Entry(self, width=40, command=clear(), textvariable=input1)
         input1Entered.grid(column=0, row=0, padx=(0, 100), pady=(0, 400))
 
-        input2 = tk.StringVar()
         input2Entered = tk.Entry(self, width=40, command=clear(), textvariable=input2)
         input2Entered.grid(column=0, row=0, padx=(0, 100), pady=(0, 300))
 
