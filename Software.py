@@ -188,66 +188,66 @@ class PredictionPage(tk.Frame):
             input15.set("")
             input16.set("")
 
-        input1 = tk.StringVar()
+
         input1Entered = tk.Entry(self, width=40, command=clear(), textvariable=input1)
         input1Entered.grid(column=0, row=0, padx=(0, 100), pady=(0, 400))
 
         input2Entered = tk.Entry(self, width=40, command=clear(), textvariable=input2)
         input2Entered.grid(column=0, row=0, padx=(0, 100), pady=(0, 300))
 
-        input3 = tk.StringVar()
+
         input3Entered = tk.Entry(self, width=40, command=clear(), textvariable=input3)
         input3Entered.grid(column=0, row=0, padx=(0, 100), pady=(0, 200))
 
-        input4 = tk.StringVar()
+
         input4Entered = tk.Entry(self, width=40, command=clear(), textvariable=input4)
         input4Entered.grid(column=0, row=0, padx=(0, 100), pady=(0, 100))
 
-        input5 = tk.StringVar()
+
         input5Entered = tk.Entry(self, width=40, command=clear(), textvariable=input5)
         input5Entered.grid(column=0, row=0, padx=(0, 100), pady=(0, 0))
 
-        input6 = tk.StringVar()
+
         input6Entered = tk.Entry(self, width=40, command=clear(), textvariable=input6)
         input6Entered.grid(column=0, row=0, padx=(0, 100), pady=(100, 0))
 
-        input7 = tk.StringVar()
+
         input7Entered = tk.Entry(self, width=40, command=clear(), textvariable=input7)
         input7Entered.grid(column=0, row=0, padx=(0, 100), pady=(200, 0))
 
-        input8 = tk.StringVar()
+
         input8Entered = tk.Entry(self, width=40, command=clear(), textvariable=input8)
         input8Entered.grid(column=0, row=0, padx=(0, 100), pady=(300, 0))
 
-        input9 = tk.StringVar()
+
         input9Entered = tk.Entry(self, width=40, command=clear(), textvariable=input9)
         input9Entered.grid(column=0, row=0, padx=(700, 0), pady=(0, 400))
 
-        input10 = tk.StringVar()
+
         input10Entered = tk.Entry(self, width=40,  command=clear(), textvariable=input10)
         input10Entered.grid(column=0, row=0, padx=(700, 0), pady=(0, 300))
 
-        input11 = tk.StringVar()
+
         input11Entered = tk.Entry(self, width=40,  command=clear(), textvariable=input11)
         input11Entered.grid(column=0, row=0, padx=(700, 0), pady=(0, 200))
 
-        input12 = tk.StringVar()
+
         input12Entered = tk.Entry(self, width=40,  command=clear(), textvariable=input12)
         input12Entered.grid(column=0, row=0, padx=(700, 0), pady=(0, 100))
 
-        input13 = tk.StringVar()
+
         input13Entered = tk.Entry(self, width=40,  command=clear(), textvariable=input13)
         input13Entered.grid(column=0, row=0, padx=(700, 0), pady=(0, 0))
 
-        input14 = tk.StringVar()
+
         input14Entered = tk.Entry(self, width=40,  command=clear(), textvariable=input14)
         input14Entered.grid(column=0, row=0, padx=(700, 0), pady=(100, 0))
 
-        input15 = tk.StringVar()
+
         input15Entered = tk.Entry(self, width=40,  command=clear(), textvariable=input15)
         input15Entered.grid(column=0, row=0, padx=(700, 0), pady=(200, 0))
 
-        input16 = tk.StringVar()
+
         input16Entered = tk.Entry(self, width=40, command=clear(), textvariable=input16)
         input16Entered.grid(column=0, row=0, padx=(700, 0), pady=(300, 0))
 
