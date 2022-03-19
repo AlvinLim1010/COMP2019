@@ -1,5 +1,6 @@
 # Data Manipulation
 import pandas as pd # for data manipulation
+import numpy as np
 
 # Sklearn
 from sklearn.svm import SVR # for building SVR model
@@ -37,8 +38,20 @@ updated_df['TSS Eff/mg/L'] = updated_df['TSS Eff/mg/L'].fillna(updated_df['TSS E
 updated_df['TSS removal'] = updated_df['TSS removal'].fillna(updated_df['TSS removal'].median()).round(1)
 
 # Getting dataset
-X = dataset[['pH Reactor', 'pH F', 'pH Eff', 'COD F/mg/L', 'COD Eff/mg/L', 'COD removal', 'BOD F/mg/L', 'BOD Eff/mg/L', 'BOD removal']].values
-y = dataset[['CH4', 'CO2', 'H2S']].values
+X = updated_df[['pH Reactor', 'pH F', 'pH Eff', 'COD F/mg/L', 'COD Eff/mg/L', 'COD removal', 'BOD F/mg/L', 'BOD Eff/mg/L', 'BOD removal']].values
+y = updated_df[['CH4', 'CO2', 'H2S']].values
+
+x = []
+x = np.concatenate((x, ['pH Reactor']))
+x = np.concatenate((x, ['pH F']))
+x = np.concatenate((x, ['pH Eff']))
+x = np.concatenate((x, ['COD F/mg/L']))
+x = np.concatenate((x, ['COD Eff/mg/L']))
+x = np.concatenate((x, ['COD removal']))
+x = np.concatenate((x, ['BOD F/mg/L']))
+x = np.concatenate((x, ['BOD Eff/mg/L']))
+x = np.concatenate((x, ['BOD removal']))
+xData = updated_df[x].values
 
 
 #Standardized and Normalized the dataset
@@ -49,12 +62,12 @@ y = dataset[['CH4', 'CO2', 'H2S']].values
 #y = sc_y.fit_transform(y)
 
 # Train/test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(xData, y, test_size=0.20, random_state=0)
 
 # Create the Linear Regression SVR regressor
 lr = LinearRegression()
 svr = SVR(kernel='rbf')
-neural_network = MLPRegressor(max_iter=500)
+neural_network = MLPRegressor(random_state=0, max_iter=500)
 
 # Create the Multioutput Regressor
 multiOutputLR = MultiOutputRegressor(lr)
@@ -70,6 +83,8 @@ multiOutputANN = multiOutputANN.fit(X_train, y_train)
 y_pred_LR = multiOutputLR.predict(X_test)
 y_pred_SVR = multiOutputSVR.predict(X_test)
 y_pred_ANN = multiOutputANN.predict(X_test)
+
+print(y_pred_SVR)
 
 score_LR = multiOutputLR.score(X_test,y_test)
 score_SVR = multiOutputSVR.score(X_test,y_test)
