@@ -4,7 +4,9 @@ from tkinter import *
 import mysql.connector
 from tkinter.filedialog import askopenfile
 from openpyxl import load_workbook
+import xlsxwriter
 from PIL import Image, ImageTk
+from datetime import datetime
 
 # Sklearn
 from sklearn.svm import SVR  # for building SVR model
@@ -202,6 +204,51 @@ class PredictionPage(tk.Frame):
         input8 = tk.StringVar()
         input9 = tk.StringVar()
 
+        input1Entered = tk.Entry(self, width=30, textvariable=input1)
+        input1Entered.grid(column=0, row=0, padx=(0,250), pady=(0, 250))
+
+        input2Entered = tk.Entry(self, width=30, textvariable=input2)
+        input2Entered.grid(column=0, row=0, padx=(0,250), pady=(0, 80))
+
+        input3Entered = tk.Entry(self, width=30, textvariable=input3)
+        input3Entered.grid(column=0, row=0, padx=(0,250), pady=(90, 0))
+
+        input4Entered = tk.Entry(self, width=30, textvariable=input4)
+        input4Entered.grid(column=0, row=0, padx=(260, 0), pady=(0, 250))
+
+        input5Entered = tk.Entry(self, width=30, textvariable=input5)
+        input5Entered.grid(column=0, row=0, padx=(260, 0), pady=(0, 80))
+
+        input6Entered = tk.Entry(self, width=30, textvariable=input6)
+        input6Entered.grid(column=0, row=0, padx=(260, 0), pady=(90, 0))
+
+        input7Entered = tk.Entry(self, width=30, textvariable=input7)
+        input7Entered.grid(column=0, row=0, padx=(780, 0), pady=(0, 250))
+
+        input8Entered = tk.Entry(self, width=30, textvariable=input8)
+        input8Entered.grid(column=0, row=0, padx=(780, 0), pady=(0, 80))
+
+        input9Entered = tk.Entry(self, width=30, textvariable=input9)
+        input9Entered.grid(column=0, row=0, padx=(780, 0), pady=(90, 0))
+
+        CH4Check = tk.IntVar()
+        CO2Check = tk.IntVar()
+        H2SCheck = tk.IntVar()
+        tk.Checkbutton(self, text='CH4', variable=CH4Check, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0, row=0,padx=(150, 0),pady=(300, 0))
+        tk.Checkbutton(self, text='CO2', variable=CO2Check, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0, row=0,padx=(250, 0),pady=(300, 0))
+        tk.Checkbutton(self, text='H2S', variable=H2SCheck, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0, row=0,padx=(350, 0),pady=(300, 0))
+
+        doPredictionButton = tk.Button(self, text="DO PREDICTION", fg="#4F3D2F", bg="white", width=23, height=2, bd=0,
+                                       command=lambda: predictSingleOutput(input1.get(), input4.get(), input7.get(),
+                                                                           input2.get(), input5.get(), input8.get(),
+                                                                           input3.get(), input6.get(), input9.get(),
+                                                                           CH4Check.get(), CO2Check.get(), H2SCheck.get()))
+        doPredictionButton.grid(column=0, row=0, padx=(340, 80), pady=(520, 20))
+
+        clearButton = tk.Button(self, text="CLEAR ALL", fg="#4F3D2F", bg="white", width=13, height=1, bd=0,
+                                command=lambda: clear())
+        clearButton.grid(column=0, row=0, padx=(850, 80), pady=(520, 20))
+
         def clear():
             input1.set("")
             input2.set("")
@@ -212,51 +259,9 @@ class PredictionPage(tk.Frame):
             input7.set("")
             input8.set("")
             input9.set("")
-
-        input1Entered = tk.Entry(self, width=30, command=clear(), textvariable=input1)
-        input1Entered.grid(column=0, row=0, padx=(0,250), pady=(0, 250))
-
-        input2Entered = tk.Entry(self, width=30, command=clear(), textvariable=input2)
-        input2Entered.grid(column=0, row=0, padx=(0,250), pady=(0, 80))
-
-        input3Entered = tk.Entry(self, width=30, command=clear(), textvariable=input3)
-        input3Entered.grid(column=0, row=0, padx=(0,250), pady=(90, 0))
-
-        input4Entered = tk.Entry(self, width=30, command=clear(), textvariable=input4)
-        input4Entered.grid(column=0, row=0, padx=(260, 0), pady=(0, 250))
-
-        input5Entered = tk.Entry(self, width=30, command=clear(), textvariable=input5)
-        input5Entered.grid(column=0, row=0, padx=(260, 0), pady=(0, 80))
-
-        input6Entered = tk.Entry(self, width=30, command=clear(), textvariable=input6)
-        input6Entered.grid(column=0, row=0, padx=(260, 0), pady=(90, 0))
-
-        input7Entered = tk.Entry(self, width=30, command=clear(), textvariable=input7)
-        input7Entered.grid(column=0, row=0, padx=(780, 0), pady=(0, 250))
-
-        input8Entered = tk.Entry(self, width=30, command=clear(), textvariable=input8)
-        input8Entered.grid(column=0, row=0, padx=(780, 0), pady=(0, 80))
-
-        input9Entered = tk.Entry(self, width=30, command=clear(), textvariable=input9)
-        input9Entered.grid(column=0, row=0, padx=(780, 0), pady=(90, 0))
-
-        CH4Check = tk.IntVar()
-        CO2Check = tk.IntVar()
-        H2SCheck = tk.IntVar()
-        CH4 = tk.Checkbutton(self, text='CH4', variable=CH4Check, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0, row=0,padx=(150, 0),pady=(300, 0))
-        CO2 = tk.Checkbutton(self, text='CO2', variable=CO2Check, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0, row=0,padx=(250, 0),pady=(300, 0))
-        H2S = tk.Checkbutton(self, text='H2S', variable=H2SCheck, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0, row=0,padx=(350, 0),pady=(300, 0))
-
-        doPredictionButton = tk.Button(self, text="DO PREDICTION", fg="#4F3D2F", bg="white", width=23, height=2, bd=0,
-                                       command=lambda: predictSingleOutput(input1.get(), input2.get(), input3.get(),
-                                                                           input4.get(), input5.get(), input6.get(),
-                                                                           input7.get(), input8.get(), input9.get(),
-                                                                           CH4Check.get(), CO2Check.get(), H2SCheck.get()))
-        doPredictionButton.grid(column=0, row=0, padx=(340, 80), pady=(520, 20))
-
-        clearButton = tk.Button(self, text="CLEAR ALL", fg="#4F3D2F", bg="white", width=13, height=1, bd=0,
-                                command=lambda: clear())
-        clearButton.grid(column=0, row=0, padx=(850, 80), pady=(520, 20))
+            CH4Check.set(0)
+            CO2Check.set(0)
+            H2SCheck.set(0)
 
         def predictSingleOutput(ph_input1, ph_input2, ph_input3, cod_input1, cod_input2, cod_input3, bod_input1,
                                 bod_input2, bod_input3, ch4_input, co2_input, h2s_input):
@@ -301,9 +306,8 @@ class PredictionPage(tk.Frame):
                 y = np.concatenate((y, ['CO2']))
             if h2s_input == 1:
                 y = np.concatenate((y, ['H2S']))
-            print(x)
-            print(y)
-            # Getting dataset
+
+            # Getting dataset to fit to Model
             xData = updated_df[x].values
             yData = updated_df[y].values
 
@@ -312,10 +316,24 @@ class PredictionPage(tk.Frame):
             multiOutputSVR = MultiOutputRegressor(svr)
             multiOutputSVR = multiOutputSVR.fit(xData, yData)
 
-            global y_pred
             y_pred = multiOutputSVR.predict(xInput)
-            print(y_pred)
+            y_pred = np.around(y_pred, 3)
+            global dataMatrix
+
+            dataMatrix = []
+            dataMatrix2 = [[]]
+            dataMatrix = np.array(dataMatrix)
+            dataMatrix2 = np.asarray(dataMatrix2)
+
+            dataMatrix = np.concatenate((dataMatrix, y))
+            dataMatrix = np.concatenate((dataMatrix, x))
+            dataMatrix2 = np.concatenate((dataMatrix2, y_pred), 1)
+            dataMatrix2 = np.concatenate((dataMatrix2, xInput), 1)
+            dataMatrix = np.vstack((dataMatrix, dataMatrix2))
+
+            clear()
             controller.show_frame(OutputPage)
+
 
 class PredictionPage2(tk.Frame):
     def __init__(self, parent, controller):
@@ -444,11 +462,31 @@ class OutputPage(tk.Frame):
                                   command=lambda: controller.show_frame(HistoryPage))
         historyButton.grid(column=0, row=0, padx=(0, 840), pady=(460, 100))
 
-        newDataButton = tk.Button(self, text="INPUT NEW DATA", fg="#4F3D2F", bg="white", width=17, height=1, bd=0)
+        newDataButton = tk.Button(self, text="INPUT NEW DATA", fg="#4F3D2F", bg="white", width=17, height=1, bd=0,
+                                  command=lambda: controller.show_frame(PredictionPage))
         newDataButton.grid(column=0, row=0, padx=(10, 380), pady=(520, 20))
 
-        downloadButton = tk.Button(self, text="DOWNLOAD OUTPUT", fg="#4F3D2F", bg="white", width=17, height=1, bd=0)
+        downloadButton = tk.Button(self, text="DOWNLOAD OUTPUT", fg="#4F3D2F", command=lambda: downloadExcelOutput(),
+                                   bg="white", width=17, height=1, bd=0)
         downloadButton.grid(column=0, row=0, padx=(350, 80), pady=(520, 20))
+
+        def downloadExcelOutput():
+            dateAndTime = datetime.now()
+            dateAndTime = dateAndTime.strftime("%d-%m-%Y_%H.%M.%S")
+
+            filename = "OutputFiles/Output_" + dateAndTime + ".xlsx"
+            workbook = xlsxwriter.Workbook(filename)
+            worksheet = workbook.add_worksheet("Output")
+
+            col = 0
+
+            for row, data in enumerate(dataMatrix):
+                worksheet.write_row(row, col, data)
+
+            worksheet.set_column(0, (len(dataMatrix[0]) - 1), 12)
+
+            workbook.close()
+
 
 app = tkinterApp()
 app.mainloop()
