@@ -45,48 +45,6 @@ class tkinterApp(tk.Tk):
         frame.tkraise()
         self.title('POMEPAI')
 
-# class LoginPage(tk.Frame):
-#
-#     def init(self, parent, controller):
-#         tk.Frame.init(self, parent)
-#
-#         # Background image
-#         bg = Image.open("Pictures/login.png")
-#         resizebg = bg.resize((760, 760), Image.ANTIALIAS)
-#         self.newbg = ImageTk.PhotoImage(resizebg)
-#
-#         rectangle = tk.Canvas(self, width=760, height=760)
-#         rectangle.create_rectangle(220, 500, 540, 270)
-#         rectangle.create_image(0, 0, image=self.newbg, anchor=NW)
-#         rectangle.create_text(385, 230, text="LOGIN", fill="#00557E", font=('Raleway', 30, 'bold'))
-#         rectangle.create_text(325, 295, text="Username", fill="black", font=('Raleway', 11))
-#         rectangle.create_text(325, 365, text="Password", fill="black", font=('Raleway', 11))
-#         rectangle.grid(row=0, column=0)
-#
-#         username = tk.StringVar()
-#         usernameEntered = tk.Entry(self, width=30, textvariable=username)
-#         usernameEntered.grid(column=0, row=0, padx=(0, 0), pady=(220, 350))
-#
-#         password = tk.StringVar()
-#         passwordEntered = tk.Entry(self, width=30, textvariable=password, show="*")
-#         passwordEntered.grid(column=0, row=0, pady=(320, 310))
-#
-#         # Define functions
-#         def on_enter(e):
-#             button.config(background='#00557E', foreground="white")
-#
-#         def on_leave(e):
-#             button.config(background='SystemButtonFace', foreground='black')
-#
-#         # Create a Button
-#         # button = tk.Button(self, text="Login", font=('Raleway', 11), width=10, height=0, bd=0,
-#         #                    command=lambda: validateLogin(username.get(), password.get()))
-#         # button.grid(column=0, row=0, pady=(400, 230))
-#
-#         # Bind the Enter and Leave Events to the Button
-#         button.bind('<Enter>', on_enter)
-#         button.bind('<Leave>', on_leave)
-
 class HomePage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -98,6 +56,7 @@ class HomePage(tk.Frame):
         self.newbg = ImageTk.PhotoImage(resizebg)
         rectangle = tk.Canvas(self, width=1100, height=700, borderwidth=0, highlightthickness=0)
         rectangle.create_image(0, 0, image=self.newbg, anchor=NW)
+        rectangle.create_text(130, 155, text="POME Prediction AI", fill="#DDAA85", font=('Raleway', 17, 'bold'))
         rectangle.grid(row=0, column=0)
 
         aboutButton = tk.Button(self, text="ABOUT", fg="#DDAA85", bg="#4F3D2F", width=30, height=2, bd=0, activebackground="#4F3D2F",
@@ -221,53 +180,159 @@ class PredictionPage2(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
+        listbox = Listbox(self, height=144, width=144, selectmode="multiple")
+        listbox.pack
+
         def getExcel():
+
             file = askopenfile(filetypes=[('Excel Files', '*.xlsx')])
             inputExcelFile = load_workbook(filename=file.name)
             inputExcelFile2 = inputExcelFile.active
 
+            features_row = inputExcelFile2[1]
+
+            for item in features_row:
+                box1.insert(END, item.value)
+
             file_label = tk.Label(self, text='File Uploaded Successfully!', foreground='green')
-            file_label.grid(column=0, row=0, padx=(10, 600), pady=(680, 15))
+            file_label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
             file_label.after(3000, lambda: file_label.destroy())
 
         # Background image
         bg = Image.open("Pictures/GUI3.png")
         resizebg = bg.resize((1100,700), Image.ANTIALIAS)
 
+        # def data():
+        #     global filename
+        #     filename = askopenfilename(initialdir=r'C:\Users\surya\Desktop\CDAC Noida\ML\Files', title="Select file")
+        #     e1.insert(0, filename)
+        #     e1.config(text=filename)
+        #
+        #     global file
+        #     file = pd.read_csv(filename)
+        #     for i in file.columns:
+        #         box1.insert(END, i)
+        #
+        #     for i in file.columns:
+        #         if type(file[i][0]) == np.float64:
+        #             file[i].fillna(file[i].mean(), inplace=True)
+        #         elif type(file[i][0]) == np.int64:
+        #             file[i].fillna(file[i].median(), inplace=True)
+        #         elif type(file[i][0]) == type(""):
+        #             imp = SimpleImputer(missing_values=np.nan, strategy='most_frequent')
+        #             s = imp.fit_transform(file[i].values.reshape(-1, 1))
+        #             file[i] = s
+        #
+        #     colss = file.columns
+        #     global X_Axis
+        #     X_Axis = StringVar()
+        #     X_Axis.set('X-axis')
+        #     choose = ttk.Combobox(self, width=22, textvariable=X_Axis)
+        #     choose['values'] = (tuple(colss))
+        #     choose.place(x=400, y=20)
+        #
+        #     global Y_Axis
+        #     Y_Axis = StringVar()
+        #     Y_Axis.set('Y-axis')
+        #     choose = ttk.Combobox(self, width=22, textvariable=Y_Axis)
+        #
+        #     choose['values'] = (tuple(colss))
+        #     choose.place(x=400, y=40)
+        #
+        #     global graphtype
+        #     graphtype = StringVar()
+        #     graphtype.set('Graph')
+        #     choose = ttk.Combobox(self, width=22, textvariable=graphtype)
+        #     choose['values'] = ('scatter', 'line', 'bar', 'hist', 'corr', 'pie')
+        #     choose.place(x=400, y=60)
+        #
+        # def getx():
+        #     x_v = []
+        #     s = box1.curselection()
+        #     global feature_col
+        #     for i in s:
+        #         if i not in feature_col:
+        #             feature_col.append((file.columns)[i])
+        #             x_v = feature_col
+        #     for i in x_v:
+        #         box2.insert(END, i)
+        #
+        # def gety():
+        #     y_v = []
+        #     global target_col
+        #     s = box1.curselection()
+        #     for j in s:
+        #         if j not in target_col:
+        #             target_col.append((file.columns)[j])
+        #             y_v = target_col
+        #
+        #     for i in y_v:
+        #         box3.insert(END, i)
+
         self.newbg = ImageTk.PhotoImage(resizebg)
         rectangle = tk.Canvas(self, width=1100, height=700, borderwidth=0, highlightthickness=0)
         rectangle.create_image(0, 0, image=self.newbg, anchor=NW)
         rectangle.create_text(130, 155, text="POME Prediction AI", fill="#DDAA85", font=('Raleway', 17, 'bold'))
-        rectangle.create_text(370, 630, text="(ONLY .xlsx FILES)", fill="Black", font=('Raleway', 10))
+        rectangle.create_text(680, 100, text="Prediction For Excel File", fill="#DDAA85", font=('Raleway', 17, 'bold'))
+        rectangle.create_text(835, 190, text="(ONLY .xlsx FILES)", fill="Black", font=('Raleway', 10))
         rectangle.grid(row=0, column=0)
 
-        aboutButton = tk.Button(self, text="ABOUT", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,font=('Raleway', 10, 'bold'), activebackground="Black",
-                               activeforeground="#DDAA85", command=lambda: controller.show_frame(HomePage))
+        aboutButton = tk.Button(self, text="ABOUT", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
+                                activebackground="Black", activeforeground="#DDAA85",
+                                font=('Raleway', 10, 'bold'),
+                                command=lambda: controller.show_frame(HomePage))
         aboutButton.grid(column=0, row=0, padx=(0, 840), pady=(0, 135))
 
-        predictButton = tk.Button(self, text="PREDICTION (SINGLE)", fg="#DDAA85", bg="Black", width=30, height=2, bd=0, font=('Raleway', 10, 'bold'),  activebackground="Black",
-                                  activeforeground="#DDAA85", command=lambda: controller.show_frame(PredictionPage))
+        predictButton = tk.Button(self, text="PREDICTION (SINGLE)", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
+                                  activebackground="Black", activeforeground="#DDAA85",
+                                  font=('Raleway', 10, 'bold'),
+                                  command=lambda: controller.show_frame(PredictionPage))
         predictButton.grid(column=0, row=0, padx=(0, 840), pady=(100, 70))
 
-        predictButton2 = tk.Button(self, text="PREDICTION (EXCEL)", fg="#DDAA85", bg="#4F3D2F", width=30, height=2, bd=0,
-                                   activebackground="#4F3D2F", activeforeground="#DDAA85",
-                                   font=('Raleway', 10, 'bold'),
-                                   command=lambda: controller.show_frame(PredictionPage2))
+        predictButton2 = tk.Button(self, text="PREDICTION (EXCEL)",  fg="#DDAA85", bg="#4F3D2F", width=30, height=2, bd=0,
+                                  activebackground="#4F3D2F", activeforeground="#DDAA85",
+                                  font=('Raleway', 10, 'bold'),
+                                  command=lambda: controller.show_frame(PredictionPage2))
         predictButton2.grid(column=0, row=0, padx=(0, 840), pady=(300, 100))
 
         historyButton = tk.Button(self, text="HISTORY", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
-                                  activebackground="#4F3D2F", activeforeground="BLACK",
+                                  activebackground="Black", activeforeground="#DDAA85",
                                   font=('Raleway', 10, 'bold'),
                                   command=lambda: controller.show_frame(HistoryPage))
         historyButton.grid(column=0, row=0, padx=(0, 840), pady=(460, 100))
 
-        importButton = tk.Button(self, text="IMPORT FILE", command=getExcel, fg="#4F3D2F", bg="white", width=10,
-                                 height=1, bd=0)
-        importButton.grid(column=0, row=0, padx=(10, 380), pady=(520, 20))
+        # listbox = Listbox(root, height=100, width=100)
+        # listbox.pack(pady=20)
 
-        doPredictionButton = tk.Button(self, text="DO PREDICTION", fg="#4F3D2F", bg="white", width=13, height=1, bd=0,
+        listbox = Listbox(self, height=144, width=144, selectmode="multiple")
+        listbox.pack
+
+        e1 = Entry(self, text='')
+        e1.grid(column=0, row=0, padx=(260,0), pady=(0, 270))  # test file path
+
+        box1 = Listbox(self, height=15, width=25, selectmode='multiple')
+        box1.grid(row=0, column=0, padx=(0, 50), pady=(15, 0))
+
+        box2 = Listbox(self, height=15, width=25)
+        box2.grid(row=0, column=0, padx=(263, 0), pady=(15, 0))
+
+        Button(self, text='Select X', activeforeground="white", activebackground="black", bd=0).grid(column=0, row=0,
+                                                                                                     padx=(157, 0),
+                                                                                                     pady=(300, 0))
+
+        box3 = Listbox(self, height=15, width=25)
+        box3.grid(row=0, column=0, padx=(575, 0), pady=(15, 0))
+        Button(self, text='Select Y', activeforeground="white", activebackground="black", bd=0).grid(column=0, row=0,
+                                                                                                     padx=(370, 0),
+                                                                                                     pady=(300, 0))
+        # self.mainloop()
+
+        doPredictionButton = tk.Button(self, text="DO PREDICTION", fg="#4F3D2F", bg="white", width=23, height=2, bd=0,
                                        command=lambda: controller.show_frame(OutputPage))
-        doPredictionButton.grid(column=0, row=0, padx=(350, 80), pady=(520, 20))
+        doPredictionButton.grid(column=0, row=0, padx=(340, 80), pady=(520, 20))
+
+        importButton = tk.Button(self, text="IMPORT FILE", command=getExcel, fg="#4F3D2F", bg="white", width=10, height=1,bd=0)
+        importButton.grid(column=0, row=0, padx=(575,0),pady=(0,270))
 
 class HistoryPage(tk.Frame):
     def __init__(self, parent, controller):
