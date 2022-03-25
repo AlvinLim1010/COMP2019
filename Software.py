@@ -61,7 +61,7 @@ class tkinterApp(tk.Tk):
         updated_df = dataset
         updated_df['CH4'] = updated_df['CH4'].fillna(updated_df['CH4'].median()).round(1)
         updated_df['Volume Biogas/L'] = updated_df['Volume Biogas/L'].fillna(
-        updated_df['Volume Biogas/L'].median()).round(1)
+            updated_df['Volume Biogas/L'].median()).round(1)
         updated_df['H2S'] = updated_df['H2S'].fillna(updated_df['H2S'].median()).round(1)
         updated_df['CO2'] = updated_df['CO2'].fillna(updated_df['CO2'].median()).round(1)
         updated_df['pH Reactor'] = updated_df['pH Reactor'].fillna(updated_df['pH Reactor'].median()).round(1)
@@ -90,7 +90,7 @@ class HomePage(tk.Frame):
 
         # Background image
         bg = Image.open("Pictures/GUI1.png")
-        resizebg = bg.resize((1100,700), Image.ANTIALIAS)
+        resizebg = bg.resize((1100, 700), Image.ANTIALIAS)
 
         self.newbg = ImageTk.PhotoImage(resizebg)
         rectangle = tk.Canvas(self, width=1100, height=700, borderwidth=0, highlightthickness=0)
@@ -98,20 +98,22 @@ class HomePage(tk.Frame):
         rectangle.create_text(130, 155, text="POME Prediction AI", fill="#DDAA85", font=('Raleway', 17, 'bold'))
         rectangle.grid(row=0, column=0)
 
-        aboutButton = tk.Button(self, text="ABOUT", fg="#DDAA85", bg="#4F3D2F", width=30, height=2, bd=0, activebackground="#4F3D2F",
+        aboutButton = tk.Button(self, text="ABOUT", fg="#DDAA85", bg="#4F3D2F", width=30, height=2, bd=0,
+                                activebackground="#4F3D2F",
                                 activeforeground="#DDAA85", font=('Raleway', 10, 'bold'),
                                 command=lambda: controller.show_frame(HomePage))
         aboutButton.grid(column=0, row=0, padx=(0, 840), pady=(0, 135))
 
-        predictButton = tk.Button(self, text="PREDICTION (SINGLE)", fg="#DDAA85", bg="Black", width=30, height=2, bd=0, activebackground="Black",
+        predictButton = tk.Button(self, text="PREDICTION (SINGLE)", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
+                                  activebackground="Black",
                                   activeforeground="#DDAA85", font=('Raleway', 10, 'bold'),
                                   command=lambda: controller.show_frame(PredictionPage))
         predictButton.grid(column=0, row=0, padx=(0, 840), pady=(100, 70))
 
         predictButton2 = tk.Button(self, text="PREDICTION (EXCEL)", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
-                                  activebackground="Black", activeforeground="#DDAA85",
-                                  font=('Raleway', 10, 'bold'),
-                                  command=lambda: controller.show_frame(PredictionPage2))
+                                   activebackground="Black", activeforeground="#DDAA85",
+                                   font=('Raleway', 10, 'bold'),
+                                   command=lambda: controller.show_frame(PredictionPage2))
         predictButton2.grid(column=0, row=0, padx=(0, 840), pady=(300, 100))
 
         historyButton = tk.Button(self, text="HISTORY", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
@@ -127,21 +129,25 @@ class PredictionPage(tk.Frame):
 
         # Background image
         bg = Image.open("Pictures/GUI2.png")
-        resizebg = bg.resize((1100,700), Image.ANTIALIAS)
+        resizebg = bg.resize((1100, 700), Image.ANTIALIAS)
 
         self.newbg = ImageTk.PhotoImage(resizebg)
         rectangle = tk.Canvas(self, width=1100, height=700, borderwidth=0, highlightthickness=0)
         rectangle.create_image(0, 0, image=self.newbg, anchor=NW)
         rectangle.create_text(130, 155, text="POME Prediction AI", fill="#DDAA85", font=('Raleway', 17, 'bold'))
-        rectangle.create_text(680, 100, text="Prediction For Single Point", fill="#DDAA85",font=('Raleway', 17, 'bold'))
-        rectangle.create_text(675, 450, text="Select Biogas For Prediction", fill="#4F3D2F", font=('Raleway', 10, 'bold'))
+        rectangle.create_text(680, 100, text="Prediction For Single Point", fill="#DDAA85",
+                              font=('Raleway', 17, 'bold'))
+        rectangle.create_text(675, 450, text="Select Biogas For Prediction", fill="#4F3D2F",
+                              font=('Raleway', 10, 'bold'))
         rectangle.grid(row=0, column=0)
 
-        aboutButton = tk.Button(self, text="ABOUT", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,font=('Raleway', 10, 'bold'), activebackground="Black",
-                               activeforeground="#DDAA85", command=lambda: controller.show_frame(HomePage))
+        aboutButton = tk.Button(self, text="ABOUT", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
+                                font=('Raleway', 10, 'bold'), activebackground="Black",
+                                activeforeground="#DDAA85", command=lambda: controller.show_frame(HomePage))
         aboutButton.grid(column=0, row=0, padx=(0, 840), pady=(0, 135))
 
-        predictButton = tk.Button(self, text="PREDICTION (SINGLE)", fg="#DDAA85", bg="#4F3D2F", width=30, height=2, bd=0, font=('Raleway', 10, 'bold'),  activebackground="#4F3D2F",
+        predictButton = tk.Button(self, text="PREDICTION (SINGLE)", fg="#DDAA85", bg="#4F3D2F", width=30, height=2,
+                                  bd=0, font=('Raleway', 10, 'bold'), activebackground="#4F3D2F",
                                   activeforeground="#DDAA85", command=lambda: controller.show_frame(PredictionPage))
         predictButton.grid(column=0, row=0, padx=(0, 840), pady=(100, 70))
 
@@ -151,7 +157,8 @@ class PredictionPage(tk.Frame):
                                    command=lambda: controller.show_frame(PredictionPage2))
         predictButton2.grid(column=0, row=0, padx=(0, 840), pady=(300, 100))
 
-        historyButton = tk.Button(self, text="HISTORY", fg="#DDAA85", bg="Black", width=30, height=2, bd=0, font=('Raleway', 10, 'bold'), activebackground="Black",
+        historyButton = tk.Button(self, text="HISTORY", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
+                                  font=('Raleway', 10, 'bold'), activebackground="Black",
                                   activeforeground="#DDAA85", command=lambda: controller.show_frame(HistoryPage))
         historyButton.grid(column=0, row=0, padx=(0, 840), pady=(460, 100))
 
@@ -166,13 +173,13 @@ class PredictionPage(tk.Frame):
         input9 = tk.StringVar()
 
         input1Entered = tk.Entry(self, width=30, textvariable=input1)
-        input1Entered.grid(column=0, row=0, padx=(0,250), pady=(0, 250))
+        input1Entered.grid(column=0, row=0, padx=(0, 250), pady=(0, 250))
 
         input2Entered = tk.Entry(self, width=30, textvariable=input2)
-        input2Entered.grid(column=0, row=0, padx=(0,250), pady=(0, 80))
+        input2Entered.grid(column=0, row=0, padx=(0, 250), pady=(0, 80))
 
         input3Entered = tk.Entry(self, width=30, textvariable=input3)
-        input3Entered.grid(column=0, row=0, padx=(0,250), pady=(90, 0))
+        input3Entered.grid(column=0, row=0, padx=(0, 250), pady=(90, 0))
 
         input4Entered = tk.Entry(self, width=30, textvariable=input4)
         input4Entered.grid(column=0, row=0, padx=(260, 0), pady=(0, 250))
@@ -195,14 +202,21 @@ class PredictionPage(tk.Frame):
         CH4Check = tk.IntVar()
         CO2Check = tk.IntVar()
         H2SCheck = tk.IntVar()
-        tk.Checkbutton(self, text='CH4', variable=CH4Check, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0, row=0,padx=(150, 0),pady=(300, 0))
-        tk.Checkbutton(self, text='CO2', variable=CO2Check, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0, row=0,padx=(250, 0),pady=(300, 0))
-        tk.Checkbutton(self, text='H2S', variable=H2SCheck, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0, row=0,padx=(350, 0),pady=(300, 0))
+        tk.Checkbutton(self, text='CH4', variable=CH4Check, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0,
+                                                                                                           row=0, padx=(
+            150, 0), pady=(300, 0))
+        tk.Checkbutton(self, text='CO2', variable=CO2Check, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0,
+                                                                                                           row=0, padx=(
+            250, 0), pady=(300, 0))
+        tk.Checkbutton(self, text='H2S', variable=H2SCheck, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0,
+                                                                                                           row=0, padx=(
+            350, 0), pady=(300, 0))
 
         def validateCheckBox():
             if CO2Check.get() == 0 and CH4Check.get() == 0 and H2SCheck.get() == 0:
                 file_label = tk.Label(self, text='Invalid input', foreground='red')
                 file_label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
+                file_label.after(3000, lambda: file_label.destroy())
             else:
                 predictSingleOutput(input1.get(), input4.get(), input7.get(),
                                     input2.get(), input5.get(), input8.get(),
@@ -218,8 +232,11 @@ class PredictionPage(tk.Frame):
                 file_label = tk.Label(self, text='Invalid input', foreground='red')
                 file_label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
                 file_label.after(3000, lambda: file_label.destroy())
+<<<<<<< HEAD
             else:
                 validateCheckBox()
+=======
+>>>>>>> 36ec93a (select y and x for excel file)
 
         doPredictionButton = tk.Button(self, text="DO PREDICTION", fg="#4F3D2F", bg="white", width=23, height=2, bd=0,
                                        command=lambda: nonInteger())
@@ -342,7 +359,8 @@ class PredictionPage(tk.Frame):
                 tree_scroll = Scrollbar(tree_frame)
                 tree_scroll.pack(side=RIGHT, fill=Y)
 
-                outputTree = ttk.Treeview(tree_frame, show='headings', height=8, yscrollcommand=tree_scroll.set, selectmode="none")
+                outputTree = ttk.Treeview(tree_frame, show='headings', height=8, yscrollcommand=tree_scroll.set,
+                                          selectmode="none")
                 outputTree.pack()
 
                 tree_scroll.config(command=outputTree.yview)
@@ -376,6 +394,7 @@ class PredictionPage2(tk.Frame):
 
         global file
         global inputExcelFile2
+
         def getExcel():
             file = askopenfile(filetypes=[('Excel Files', '*.xlsx')])
             inputExcelFile = load_workbook(filename=file.name)
@@ -392,7 +411,7 @@ class PredictionPage2(tk.Frame):
 
         # Background image
         bg = Image.open("Pictures/GUI3.png")
-        resizebg = bg.resize((1100,700), Image.ANTIALIAS)
+        resizebg = bg.resize((1100, 700), Image.ANTIALIAS)
 
         self.newbg = ImageTk.PhotoImage(resizebg)
         rectangle = tk.Canvas(self, width=1100, height=700, borderwidth=0, highlightthickness=0)
@@ -414,10 +433,11 @@ class PredictionPage2(tk.Frame):
                                   command=lambda: controller.show_frame(PredictionPage))
         predictButton.grid(column=0, row=0, padx=(0, 840), pady=(100, 70))
 
-        predictButton2 = tk.Button(self, text="PREDICTION (EXCEL)",  fg="#DDAA85", bg="#4F3D2F", width=30, height=2, bd=0,
-                                  activebackground="#4F3D2F", activeforeground="#DDAA85",
-                                  font=('Raleway', 10, 'bold'),
-                                  command=lambda: controller.show_frame(PredictionPage2))
+        predictButton2 = tk.Button(self, text="PREDICTION (EXCEL)", fg="#DDAA85", bg="#4F3D2F", width=30, height=2,
+                                   bd=0,
+                                   activebackground="#4F3D2F", activeforeground="#DDAA85",
+                                   font=('Raleway', 10, 'bold'),
+                                   command=lambda: controller.show_frame(PredictionPage2))
         predictButton2.grid(column=0, row=0, padx=(0, 840), pady=(300, 100))
 
         historyButton = tk.Button(self, text="HISTORY", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
@@ -456,6 +476,32 @@ class PredictionPage2(tk.Frame):
                 fromList.delete(index)
                 toList.insert(END, val)
 
+        def remove():
+            box2.delete(0, END)
+            box3.delete(0, END)
+
+        def testingGetx():
+            x_v = []
+            s = box1.curselection()
+            box2.delete(0, END)
+            for i in s:
+                data = box1.get(i)
+                x_v.append(data)
+
+            for data in x_v:
+                box2.insert(END, data)
+
+        def testingGety():
+            y_v = []
+            s = box1.curselection()
+            box3.delete(0, END)
+            for i in s:
+                data = box1.get(i)
+                y_v.append(data)
+
+            for data in y_v:
+                box3.insert(END, data)
+
         def getx():
             x_v = []
             s = box1.curselection()
@@ -469,12 +515,11 @@ class PredictionPage2(tk.Frame):
                 box2.insert(END, i.value)
 
         Button(self, text='Select X', activeforeground="white", activebackground="black", bd=0,
-               command=lambda: moveTo(box1, box2)).grid(column=0, row=0, padx=(157, 0), pady=(300, 0))
+               command=lambda: testingGetx()).grid(column=0, row=0, padx=(157, 0), pady=(300, 0))
         Button(self, text='Select Y', activeforeground="white", activebackground="black", bd=0,
-               command=lambda: moveTo(box1, box3)).grid(column=0, row=0,padx=(370, 0),pady=(300, 0))
+               command=lambda: testingGety()).grid(column=0, row=0, padx=(370, 0), pady=(300, 0))
         Button(self, text='Remove', activeforeground="white", activebackground="black", bd=0,
-               command=lambda: [moveTo(box2, box1), moveTo(box3, box1)]).grid(column=0, row=0, padx=(400, 0),
-                                                                              pady=(400, 0))
+               command=lambda: remove()).grid(column=0, row=0, padx=(400, 0), pady=(400, 0))
 
         e1 = Entry(self, text='')
         e1.grid(column=0, row=0, padx=(260, 0), pady=(0, 270))  # test file path
@@ -500,7 +545,8 @@ class PredictionPage2(tk.Frame):
                                        command=lambda: controller.show_frame(OutputPage))
         doPredictionButton.grid(column=0, row=0, padx=(340, 80), pady=(520, 20))
 
-        importButton = tk.Button(self, text="IMPORT FILE", command=getExcel, fg="#4F3D2F", bg="white", width=10, height=1, bd=0)
+        importButton = tk.Button(self, text="IMPORT FILE", command=getExcel, fg="#4F3D2F", bg="white", width=10,
+                                 height=1, bd=0)
         importButton.grid(column=0, row=0, padx=(575, 0), pady=(0, 270))
 
 
@@ -518,20 +564,22 @@ class HistoryPage(tk.Frame):
         rectangle.create_text(130, 155, text="POME Prediction AI", fill="#DDAA85", font=('Raleway', 17, 'bold'))
         rectangle.grid(row=0, column=0)
 
-        aboutButton = tk.Button(self, text="ABOUT", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,  activebackground="Black", activeforeground="#DDAA85",
+        aboutButton = tk.Button(self, text="ABOUT", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
+                                activebackground="Black", activeforeground="#DDAA85",
                                 font=('Raleway', 10, 'bold'),
                                 command=lambda: controller.show_frame(HomePage))
         aboutButton.grid(column=0, row=0, padx=(0, 840), pady=(0, 135))
 
-        predictButton = tk.Button(self, text="PREDICTION (SINGLE)",fg="#DDAA85", bg="Black", width=30, height=2, bd=0, activebackground="Black", activeforeground="#DDAA85",
+        predictButton = tk.Button(self, text="PREDICTION (SINGLE)", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
+                                  activebackground="Black", activeforeground="#DDAA85",
                                   font=('Raleway', 10, 'bold'),
                                   command=lambda: controller.show_frame(PredictionPage))
         predictButton.grid(column=0, row=0, padx=(0, 840), pady=(100, 70))
 
         predictButton2 = tk.Button(self, text="PREDICTION (EXCEL)", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
-                                  activebackground="Black", activeforeground="#DDAA85",
-                                  font=('Raleway', 10, 'bold'),
-                                  command=lambda: controller.show_frame(PredictionPage2))
+                                   activebackground="Black", activeforeground="#DDAA85",
+                                   font=('Raleway', 10, 'bold'),
+                                   command=lambda: controller.show_frame(PredictionPage2))
         predictButton2.grid(column=0, row=0, padx=(0, 840), pady=(300, 100))
 
         historyButton = tk.Button(self, text="HISTORY", fg="#DDAA85", bg="#4F3D2F", width=30, height=2, bd=0,
@@ -562,14 +610,14 @@ class OutputPage(tk.Frame):
         aboutButton.grid(column=0, row=0, padx=(0, 840), pady=(0, 135))
 
         predictButton = tk.Button(self, text="PREDICTION (SINGLE)", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
-                                font=('Raleway', 10, 'bold'), activebackground="#4F3D2F",
+                                  font=('Raleway', 10, 'bold'), activebackground="#4F3D2F",
                                   activeforeground="#DDAA85", command=lambda: controller.show_frame(PredictionPage))
         predictButton.grid(column=0, row=0, padx=(0, 840), pady=(100, 70))
 
         predictButton2 = tk.Button(self, text="PREDICTION (EXCEL)", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
-                                  activebackground="Black", activeforeground="#DDAA85",
-                                  font=('Raleway', 10, 'bold'),
-                                  command=lambda: controller.show_frame(PredictionPage2))
+                                   activebackground="Black", activeforeground="#DDAA85",
+                                   font=('Raleway', 10, 'bold'),
+                                   command=lambda: controller.show_frame(PredictionPage2))
         predictButton2.grid(column=0, row=0, padx=(0, 840), pady=(300, 100))
 
         historyButton = tk.Button(self, text="HISTORY", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
