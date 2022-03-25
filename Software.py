@@ -203,14 +203,11 @@ class PredictionPage(tk.Frame):
         CO2Check = tk.IntVar()
         H2SCheck = tk.IntVar()
         tk.Checkbutton(self, text='CH4', variable=CH4Check, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0,
-                                                                                                           row=0, padx=(
-            150, 0), pady=(300, 0))
+                                                                                                           row=0, padx=(150, 0), pady=(300, 0))
         tk.Checkbutton(self, text='CO2', variable=CO2Check, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0,
-                                                                                                           row=0, padx=(
-            250, 0), pady=(300, 0))
+                                                                                                           row=0, padx=(250, 0), pady=(300, 0))
         tk.Checkbutton(self, text='H2S', variable=H2SCheck, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0,
-                                                                                                           row=0, padx=(
-            350, 0), pady=(300, 0))
+                                                                                                           row=0, padx= (350, 0), pady=(300, 0))
 
         def validateCheckBox():
             if CO2Check.get() == 0 and CH4Check.get() == 0 and H2SCheck.get() == 0:
@@ -228,10 +225,11 @@ class PredictionPage(tk.Frame):
             # if (input1.get().isnumeric() or input2.get().isnumeric() or input3.get().isnumeric() or input4.get().isnumeric() or input5.get().isnumeric() or input6.get().isnumeric() or input7.get().isnumeric() or input8.get().isnumeric() or input9.get().isnumeric()):
             #     validateCheckBox()
 
-            if (input1.get().isalpha() or input2.get().isalpha() or input3.get().isalpha() or input4.get().isalpha() or input5.get().isalpha() or input6.get().isalpha() or input7.get().isalpha() or input8.get().isalpha() or input9.get().isalpha()):
-                file_label = tk.Label(self, text='Invalid input', foreground='red')
-                file_label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
-                file_label.after(3000, lambda: file_label.destroy())
+            if input1.get() == '' and input2.get() == '' and input3.get() == '' and input4.get() == '' and input5.get() == '' and input6.get() == '' and input7.get() == '' and input8.get() == '' and input9.get() == '':
+                if input1.get().isalpha() or input2.get().isalpha() or input3.get().isalpha() or input4.get().isalpha() or input5.get().isalpha() or input6.get().isalpha() or input7.get().isalpha() or input8.get().isalpha() or input9.get().isalpha():
+                    file_label = tk.Label(self, text='Invalid input', foreground='red')
+                    file_label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
+                    file_label.after(3000, lambda: file_label.destroy())
 
             else:
                 validateCheckBox()
@@ -329,7 +327,7 @@ class PredictionPage(tk.Frame):
 
             clear()
 
-            def outputScreen(headingsToDisplayOnScreen, dataToDisplayInFile, dataToDisplayOnScreen):
+            def outputScreenSinglePrediction(headingsToDisplayOnScreen, dataToDisplayInFile, dataToDisplayOnScreen):
                 outputDisplaying = Tk()
                 outputDisplaying.title("OutputScreen")
                 outputDisplaying.resizable(0, 0)
@@ -380,7 +378,7 @@ class PredictionPage(tk.Frame):
 
                 outputDisplaying.mainloop()
 
-            outputScreen(dataHeadingOnScreen, dataHeadings, dataOnScreen)
+            outputScreenSinglePrediction(dataHeadingOnScreen, dataHeadings, dataOnScreen)
 
 
 class PredictionPage2(tk.Frame):
@@ -395,10 +393,15 @@ class PredictionPage2(tk.Frame):
 
         def getExcel():
             file = askopenfile(filetypes=[('Excel Files', '*.xlsx')])
+            print(file)
+            e1.insert(0,file)
+            e1.config(text=file)
             inputExcelFile = load_workbook(filename=file.name)
             inputExcelFile2 = inputExcelFile.active
 
             features_row = inputExcelFile2[1]
+
+            box1.delete(0, END)
 
             for item in features_row:
                 box1.insert(END, item.value)
@@ -444,41 +447,11 @@ class PredictionPage2(tk.Frame):
                                   command=lambda: controller.show_frame(HistoryPage))
         historyButton.grid(column=0, row=0, padx=(0, 840), pady=(460, 100))
 
-        # listbox = Listbox(root, height=100, width=100)
-        # listbox.pack(pady=20)
-
-        listbox = Listbox(self, height=144, width=144, selectmode="multiple")
-        listbox.pack
-
-        def moveTo(fromList, toList):
-            val2 = []
-            indexList = fromList.curselection()
-            global features
-            features = inputExcelFile2[1]
-            if indexList:
-                index = indexList[0]
-
-            for i in indexList:
-                val = fromList.get(indexList[i])
-                val2.append(val)
-
-            for i in val2:
-                val2.fromList.delete(index)
-                toList.insert(END, val2[i])
-
-        def moveTo(fromList, toList):
-            indexList = fromList.curselection()
-            if indexList:
-                index = indexList[0]
-                val = fromList.get(index)
-                fromList.delete(index)
-                toList.insert(END, val)
-
         def remove():
             box2.delete(0, END)
             box3.delete(0, END)
 
-        def testingGetx():
+        def getX():
             x_v = []
             s = box1.curselection()
             box2.delete(0, END)
@@ -489,7 +462,9 @@ class PredictionPage2(tk.Frame):
             for data in x_v:
                 box2.insert(END, data)
 
-        def testingGety():
+            box1.select_clear(0, END)
+
+        def getY():
             y_v = []
             s = box1.curselection()
             box3.delete(0, END)
@@ -500,44 +475,24 @@ class PredictionPage2(tk.Frame):
             for data in y_v:
                 box3.insert(END, data)
 
-        def getx():
-            x_v = []
-            s = box1.curselection()
-            global feature_col
-            feature_col = inputExcelFile2[1]
-            for i in s:
-                if i not in feature_col:
-                    feature_col.append((file.columns)[i])
-                    x_v = feature_col
-            for i in x_v:
-                box2.insert(END, i.value)
-
         Button(self, text='Select X', activeforeground="white", activebackground="black", bd=0,
-               command=lambda: testingGetx()).grid(column=0, row=0, padx=(157, 0), pady=(300, 0))
+               command=lambda: getX()).grid(column=0, row=0, padx=(157, 0), pady=(300, 0))
         Button(self, text='Select Y', activeforeground="white", activebackground="black", bd=0,
-               command=lambda: testingGety()).grid(column=0, row=0, padx=(370, 0), pady=(300, 0))
+               command=lambda: getY()).grid(column=0, row=0, padx=(370, 0), pady=(300, 0))
         Button(self, text='Remove', activeforeground="white", activebackground="black", bd=0,
                command=lambda: remove()).grid(column=0, row=0, padx=(400, 0), pady=(400, 0))
 
         e1 = Entry(self, text='')
-        e1.grid(column=0, row=0, padx=(260, 0), pady=(0, 270))  # test file path
+        e1.grid(column=0, row=0, padx=(260, 0), pady=(0, 270))
 
-        box1 = Listbox(self, height=15, width=25, selectmode='multiple')
+        box1 = Listbox(self, height=15, width=25, selectmode='multiple', activestyle='none')
         box1.grid(row=0, column=0, padx=(0, 50), pady=(15, 0))
 
         box2 = Listbox(self, height=15, width=25)
         box2.grid(row=0, column=0, padx=(263, 0), pady=(15, 0))
 
-        # Button(self, text='Select X', command=getx, activeforeground="white", activebackground="black", bd=0).grid(column=0, row=0,
-        #                                                                                              padx=(157, 0),
-        #                                                                                              pady=(300, 0))
-
         box3 = Listbox(self, height=15, width=25)
         box3.grid(row=0, column=0, padx=(575, 0), pady=(15, 0))
-        # Button(self, text='Select Y', activeforeground="white", activebackground="black", bd=0).grid(column=0, row=0,
-        #                                                                                              padx=(370, 0),
-        #                                                                                              pady=(300, 0))
-        # # self.mainloop()
 
         doPredictionButton = tk.Button(self, text="DO PREDICTION", fg="#4F3D2F", bg="white", width=23, height=2, bd=0,
                                        command=lambda: controller.show_frame(OutputPage))
