@@ -136,21 +136,21 @@ class PredictionPage(tk.Frame):
         rectangle.grid(row=0, column=0)
 
         aboutButton = tk.Button(self, text="ABOUT", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,font=('Raleway', 10, 'bold'), activebackground="Black",
-                               activeforeground="#DDAA85", command=lambda: controller.show_frame(HomePage))
+                               activeforeground="#DDAA85", command=lambda: [controller.show_frame(HomePage), clear()])
         aboutButton.grid(column=0, row=0, padx=(0, 840), pady=(0, 135))
 
         predictButton = tk.Button(self, text="PREDICTION (SINGLE)", fg="#DDAA85", bg="#4F3D2F", width=30, height=2, bd=0, font=('Raleway', 10, 'bold'),  activebackground="#4F3D2F",
-                                  activeforeground="#DDAA85", command=lambda: controller.show_frame(PredictionPage))
+                                  activeforeground="#DDAA85", command=lambda: [controller.show_frame(PredictionPage), clear()])
         predictButton.grid(column=0, row=0, padx=(0, 840), pady=(100, 70))
 
         predictButton2 = tk.Button(self, text="PREDICTION (EXCEL)", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
                                    activebackground="Black", activeforeground="#DDAA85",
                                    font=('Raleway', 10, 'bold'),
-                                   command=lambda: controller.show_frame(PredictionPage2))
+                                   command=lambda: [controller.show_frame(PredictionPage2), clear()])
         predictButton2.grid(column=0, row=0, padx=(0, 840), pady=(300, 100))
 
         historyButton = tk.Button(self, text="HISTORY", fg="#DDAA85", bg="Black", width=30, height=2, bd=0, font=('Raleway', 10, 'bold'), activebackground="Black",
-                                  activeforeground="#DDAA85", command=lambda: controller.show_frame(HistoryPage))
+                                  activeforeground="#DDAA85", command=lambda: [controller.show_frame(HistoryPage), clear()])
         historyButton.grid(column=0, row=0, padx=(0, 840), pady=(460, 100))
 
         input1 = tk.StringVar()
@@ -162,6 +162,25 @@ class PredictionPage(tk.Frame):
         input7 = tk.StringVar()
         input8 = tk.StringVar()
         input9 = tk.StringVar()
+
+        def validateCheckBox():
+            if CO2Check.get() == 0 and CH4Check.get() == 0 and H2SCheck.get() == 0:
+                file_label = tk.Label(self, text='Invalid input', foreground='red')
+                file_label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
+            else:
+                predictSingleOutput(input1.get(), input4.get(), input7.get(),
+                                    input2.get(), input5.get(), input8.get(),
+                                    input3.get(), input6.get(), input9.get(),
+                                    CH4Check.get(), CO2Check.get(),
+                                    H2SCheck.get())
+
+        def nonInteger():
+            if input1.get().isnumeric() and input2.get().isnumeric() and input3.get().isnumeric() and input4.get().isnumeric() and input5.get().isnumeric() and input6.get().isnumeric() and input7.get().isnumeric() and input8.get().isnumeric() and input9.get().isnumeric():
+                validateCheckBox()
+            else:
+                file_label = tk.Label(self, text='Invalid input', foreground='red')
+                file_label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
+
 
         input1Entered = tk.Entry(self, width=30, textvariable=input1)
         input1Entered.grid(column=0, row=0, padx=(0,250), pady=(0, 250))
@@ -198,10 +217,8 @@ class PredictionPage(tk.Frame):
         tk.Checkbutton(self, text='H2S', variable=H2SCheck, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0, row=0,padx=(350, 0),pady=(300, 0))
 
         doPredictionButton = tk.Button(self, text="DO PREDICTION", fg="#4F3D2F", bg="white", width=23, height=2, bd=0,
-                                       command=lambda: predictSingleOutput(input1.get(), input4.get(), input7.get(),
-                                                                           input2.get(), input5.get(), input8.get(),
-                                                                           input3.get(), input6.get(), input9.get(),
-                                                                           CH4Check.get(), CO2Check.get(), H2SCheck.get()))
+                                       command=lambda: nonInteger())
+
         doPredictionButton.grid(column=0, row=0, padx=(340, 80), pady=(520, 20))
 
         clearButton = tk.Button(self, text="CLEAR ALL", fg="#4F3D2F", bg="white", width=13, height=1, bd=0,
@@ -301,6 +318,8 @@ class PredictionPage2(tk.Frame):
         listbox = Listbox(self, height=144, width=144, selectmode="multiple")
         listbox.pack
 
+        global file
+        global inputExcelFile2
         def getExcel():
 
             file = askopenfile(filetypes=[('Excel Files', '*.xlsx')])
@@ -358,6 +377,51 @@ class PredictionPage2(tk.Frame):
         listbox = Listbox(self, height=144, width=144, selectmode="multiple")
         listbox.pack
 
+        def moveTo(fromList, toList):
+            val2 = []
+            indexList = fromList.curselection()
+            global features
+            features = inputExcelFile2[1]
+            if indexList:
+                index = indexList[0]
+
+            for i in indexList:
+                val = fromList.get(indexList[i])
+                val2.append(val)
+
+            for i in val2:
+                val2.fromList.delete(index)
+                toList.insert(END, val2[i])
+
+        def moveTo(fromList, toList):
+            indexList = fromList.curselection()
+            if indexList:
+                index = indexList[0]
+                val = fromList.get(index)
+                fromList.delete(index)
+                toList.insert(END, val)
+
+        def getx():
+            x_v = []
+            s = box1.curselection()
+            global feature_col
+            feature_col = inputExcelFile2[1]
+            for i in s:
+                if i not in feature_col:
+                    feature_col.append((file.columns)[i])
+                    x_v = feature_col
+            for i in x_v:
+                box2.insert(END, i.value)
+
+        Button(self, text='Select X', activeforeground="white", activebackground="black", bd=0,
+               command=lambda: moveTo(box1, box2)).grid(column=0, row=0, padx=(157, 0), pady=(300, 0))
+        Button(self, text='Select Y', activeforeground="white", activebackground="black", bd=0,
+               command=lambda: moveTo(box1, box3)).grid(column=0, row=0,padx=(370, 0),pady=(300, 0))
+        Button(self, text='Remove', activeforeground="white", activebackground="black", bd=0,
+               command=lambda: [moveTo(box2, box1), moveTo(box3, box1)]).grid(column=0, row=0, padx=(400, 0),
+                                                                              pady=(400, 0))
+
+
         e1 = Entry(self, text='')
         e1.grid(column=0, row=0, padx=(260,0), pady=(0, 270))  # test file path
 
@@ -367,16 +431,16 @@ class PredictionPage2(tk.Frame):
         box2 = Listbox(self, height=15, width=25)
         box2.grid(row=0, column=0, padx=(263, 0), pady=(15, 0))
 
-        Button(self, text='Select X', activeforeground="white", activebackground="black", bd=0).grid(column=0, row=0,
-                                                                                                     padx=(157, 0),
-                                                                                                     pady=(300, 0))
+        # Button(self, text='Select X', command=getx, activeforeground="white", activebackground="black", bd=0).grid(column=0, row=0,
+        #                                                                                              padx=(157, 0),
+        #                                                                                              pady=(300, 0))
 
         box3 = Listbox(self, height=15, width=25)
         box3.grid(row=0, column=0, padx=(575, 0), pady=(15, 0))
-        Button(self, text='Select Y', activeforeground="white", activebackground="black", bd=0).grid(column=0, row=0,
-                                                                                                     padx=(370, 0),
-                                                                                                     pady=(300, 0))
-        # self.mainloop()
+        # Button(self, text='Select Y', activeforeground="white", activebackground="black", bd=0).grid(column=0, row=0,
+        #                                                                                              padx=(370, 0),
+        #                                                                                              pady=(300, 0))
+        # # self.mainloop()
 
         doPredictionButton = tk.Button(self, text="DO PREDICTION", fg="#4F3D2F", bg="white", width=23, height=2, bd=0,
                                        command=lambda: controller.show_frame(OutputPage))
