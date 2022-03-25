@@ -211,11 +211,15 @@ class PredictionPage(tk.Frame):
                                     H2SCheck.get())
 
         def nonInteger():
-            if input1.get().isnumeric() or input2.get().isnumeric() or input3.get().isnumeric() or input4.get().isnumeric() or input5.get().isnumeric() or input6.get().isnumeric() or input7.get().isnumeric() or input8.get().isnumeric() or input9.get().isnumeric():
-                validateCheckBox()
-            else:
+            # if (input1.get().isnumeric() or input2.get().isnumeric() or input3.get().isnumeric() or input4.get().isnumeric() or input5.get().isnumeric() or input6.get().isnumeric() or input7.get().isnumeric() or input8.get().isnumeric() or input9.get().isnumeric()):
+            #     validateCheckBox()
+
+            if (input1.get().isalpha() or input2.get().isalpha() or input3.get().isalpha() or input4.get().isalpha() or input5.get().isalpha() or input6.get().isalpha() or input7.get().isalpha() or input8.get().isalpha() or input9.get().isalpha()):
                 file_label = tk.Label(self, text='Invalid input', foreground='red')
                 file_label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
+                file_label.after(3000, lambda: file_label.destroy())
+            else:
+                validateCheckBox()
 
         doPredictionButton = tk.Button(self, text="DO PREDICTION", fg="#4F3D2F", bg="white", width=23, height=2, bd=0,
                                        command=lambda: nonInteger())
