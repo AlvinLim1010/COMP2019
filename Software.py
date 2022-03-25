@@ -18,6 +18,7 @@ import numpy as np  # for data manipulation
 
 TitleFont = ("Arial", 35)
 
+
 class tkinterApp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
@@ -82,6 +83,7 @@ class tkinterApp(tk.Tk):
         frame.tkraise()
         self.title('POMEPAI')
 
+
 class HomePage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -136,21 +138,21 @@ class PredictionPage(tk.Frame):
         rectangle.grid(row=0, column=0)
 
         aboutButton = tk.Button(self, text="ABOUT", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,font=('Raleway', 10, 'bold'), activebackground="Black",
-                               activeforeground="#DDAA85", command=lambda: [controller.show_frame(HomePage), clear()])
+                               activeforeground="#DDAA85", command=lambda: controller.show_frame(HomePage))
         aboutButton.grid(column=0, row=0, padx=(0, 840), pady=(0, 135))
 
         predictButton = tk.Button(self, text="PREDICTION (SINGLE)", fg="#DDAA85", bg="#4F3D2F", width=30, height=2, bd=0, font=('Raleway', 10, 'bold'),  activebackground="#4F3D2F",
-                                  activeforeground="#DDAA85", command=lambda: [controller.show_frame(PredictionPage), clear()])
+                                  activeforeground="#DDAA85", command=lambda: controller.show_frame(PredictionPage))
         predictButton.grid(column=0, row=0, padx=(0, 840), pady=(100, 70))
 
         predictButton2 = tk.Button(self, text="PREDICTION (EXCEL)", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
                                    activebackground="Black", activeforeground="#DDAA85",
                                    font=('Raleway', 10, 'bold'),
-                                   command=lambda: [controller.show_frame(PredictionPage2), clear()])
+                                   command=lambda: controller.show_frame(PredictionPage2))
         predictButton2.grid(column=0, row=0, padx=(0, 840), pady=(300, 100))
 
         historyButton = tk.Button(self, text="HISTORY", fg="#DDAA85", bg="Black", width=30, height=2, bd=0, font=('Raleway', 10, 'bold'), activebackground="Black",
-                                  activeforeground="#DDAA85", command=lambda: [controller.show_frame(HistoryPage), clear()])
+                                  activeforeground="#DDAA85", command=lambda: controller.show_frame(HistoryPage))
         historyButton.grid(column=0, row=0, padx=(0, 840), pady=(460, 100))
 
         input1 = tk.StringVar()
@@ -162,25 +164,6 @@ class PredictionPage(tk.Frame):
         input7 = tk.StringVar()
         input8 = tk.StringVar()
         input9 = tk.StringVar()
-
-        def validateCheckBox():
-            if CO2Check.get() == 0 and CH4Check.get() == 0 and H2SCheck.get() == 0:
-                file_label = tk.Label(self, text='Invalid input', foreground='red')
-                file_label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
-            else:
-                predictSingleOutput(input1.get(), input4.get(), input7.get(),
-                                    input2.get(), input5.get(), input8.get(),
-                                    input3.get(), input6.get(), input9.get(),
-                                    CH4Check.get(), CO2Check.get(),
-                                    H2SCheck.get())
-
-        def nonInteger():
-            if input1.get().isnumeric() or input2.get().isnumeric() or input3.get().isnumeric() or input4.get().isnumeric() or input5.get().isnumeric() or input6.get().isnumeric() or input7.get().isnumeric() or input8.get().isnumeric() or input9.get().isnumeric():
-                validateCheckBox()
-            else:
-                file_label = tk.Label(self, text='Invalid input', foreground='red')
-                file_label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
-
 
         input1Entered = tk.Entry(self, width=30, textvariable=input1)
         input1Entered.grid(column=0, row=0, padx=(0,250), pady=(0, 250))
@@ -216,9 +199,26 @@ class PredictionPage(tk.Frame):
         tk.Checkbutton(self, text='CO2', variable=CO2Check, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0, row=0,padx=(250, 0),pady=(300, 0))
         tk.Checkbutton(self, text='H2S', variable=H2SCheck, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0, row=0,padx=(350, 0),pady=(300, 0))
 
+        def validateCheckBox():
+            if CO2Check.get() == 0 and CH4Check.get() == 0 and H2SCheck.get() == 0:
+                file_label = tk.Label(self, text='Invalid input', foreground='red')
+                file_label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
+            else:
+                predictSingleOutput(input1.get(), input4.get(), input7.get(),
+                                    input2.get(), input5.get(), input8.get(),
+                                    input3.get(), input6.get(), input9.get(),
+                                    CH4Check.get(), CO2Check.get(),
+                                    H2SCheck.get())
+
+        def nonInteger():
+            if input1.get().isnumeric() or input2.get().isnumeric() or input3.get().isnumeric() or input4.get().isnumeric() or input5.get().isnumeric() or input6.get().isnumeric() or input7.get().isnumeric() or input8.get().isnumeric() or input9.get().isnumeric():
+                validateCheckBox()
+            else:
+                file_label = tk.Label(self, text='Invalid input', foreground='red')
+                file_label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
+
         doPredictionButton = tk.Button(self, text="DO PREDICTION", fg="#4F3D2F", bg="white", width=23, height=2, bd=0,
                                        command=lambda: nonInteger())
-
         doPredictionButton.grid(column=0, row=0, padx=(340, 80), pady=(520, 20))
 
         clearButton = tk.Button(self, text="CLEAR ALL", fg="#4F3D2F", bg="white", width=13, height=1, bd=0,
@@ -294,21 +294,73 @@ class PredictionPage(tk.Frame):
 
             y_pred = multiOutputSVR.predict(xInput)
             y_pred = np.around(y_pred, 3)
-            global dataMatrix
 
-            dataMatrix = []
-            dataMatrix2 = [[]]
-            dataMatrix = np.array(dataMatrix)
-            dataMatrix2 = np.asarray(dataMatrix2)
+            dataHeadings = []
+            dataXAndY = [[]]
+            dataHeadings = np.array(dataHeadings)
+            dataXAndY = np.array(dataXAndY)
 
-            dataMatrix = np.concatenate((dataMatrix, y))
-            dataMatrix = np.concatenate((dataMatrix, x))
-            dataMatrix2 = np.concatenate((dataMatrix2, y_pred), 1)
-            dataMatrix2 = np.concatenate((dataMatrix2, xInput), 1)
-            dataMatrix = np.vstack((dataMatrix, dataMatrix2))
+            dataHeadings = np.concatenate((dataHeadings, y))
+            dataHeadings = np.concatenate((dataHeadings, x))
+            dataHeadingOnScreen = dataHeadings.tolist()
+            dataXAndY = np.concatenate((dataXAndY, y_pred), 1)
+            dataXAndY = np.concatenate((dataXAndY, xInput), 1)
+            dataOnScreen = dataXAndY.tolist()
+            dataHeadings = np.vstack((dataHeadings, dataXAndY))
 
             clear()
-            controller.show_frame(OutputPage)
+
+            def outputScreen(headingsToDisplayOnScreen, dataToDisplayInFile, dataToDisplayOnScreen):
+                outputDisplaying = Tk()
+                outputDisplaying.title("OutputScreen")
+                outputDisplaying.resizable(0, 0)
+
+                def downloadExcelOutput():
+                    dateAndTime = datetime.now()
+                    dateAndTime = dateAndTime.strftime("%d-%m-%Y_%H.%M.%S")
+
+                    filename = "OutputFiles/Output_" + dateAndTime + ".xlsx"
+                    workbook = xlsxwriter.Workbook(filename)
+                    worksheet = workbook.add_worksheet("Output")
+
+                    col = 0
+
+                    for row, dataInFile in enumerate(dataToDisplayInFile):
+                        worksheet.write_row(row, col, dataInFile)
+
+                    worksheet.set_column(0, (len(dataToDisplayInFile[0]) - 1), 12)
+
+                    workbook.close()
+
+                tree_frame = Frame(outputDisplaying)
+                tree_frame.pack()
+
+                tree_scroll = Scrollbar(tree_frame)
+                tree_scroll.pack(side=RIGHT, fill=Y)
+
+                outputTree = ttk.Treeview(tree_frame, show='headings', height=8, yscrollcommand=tree_scroll.set, selectmode="none")
+                outputTree.pack()
+
+                tree_scroll.config(command=outputTree.yview)
+
+                outputTree['columns'] = headingsToDisplayOnScreen
+                outputTree.column("#0", width=0, stretch=False)
+                length = int(800 / len(headingsToDisplayOnScreen))
+
+                for i in headingsToDisplayOnScreen:
+                    outputTree.column(i, anchor=CENTER, width=length, stretch=False)
+                    outputTree.heading(i, text=i, anchor=CENTER)
+
+                count = 0
+                for data in dataToDisplayOnScreen:
+                    outputTree.insert(parent='', index='end', iid=count, text="", values=data)
+                    count += 1
+
+                ttk.Button(outputDisplaying, text='Download Output', command=lambda: downloadExcelOutput()).pack()
+
+                outputDisplaying.mainloop()
+
+            outputScreen(dataHeadingOnScreen, dataHeadings, dataOnScreen)
 
 
 class PredictionPage2(tk.Frame):
@@ -321,7 +373,6 @@ class PredictionPage2(tk.Frame):
         global file
         global inputExcelFile2
         def getExcel():
-
             file = askopenfile(filetypes=[('Excel Files', '*.xlsx')])
             inputExcelFile = load_workbook(filename=file.name)
             inputExcelFile2 = inputExcelFile.active
@@ -421,9 +472,8 @@ class PredictionPage2(tk.Frame):
                command=lambda: [moveTo(box2, box1), moveTo(box3, box1)]).grid(column=0, row=0, padx=(400, 0),
                                                                               pady=(400, 0))
 
-
         e1 = Entry(self, text='')
-        e1.grid(column=0, row=0, padx=(260,0), pady=(0, 270))  # test file path
+        e1.grid(column=0, row=0, padx=(260, 0), pady=(0, 270))  # test file path
 
         box1 = Listbox(self, height=15, width=25, selectmode='multiple')
         box1.grid(row=0, column=0, padx=(0, 50), pady=(15, 0))
@@ -446,8 +496,8 @@ class PredictionPage2(tk.Frame):
                                        command=lambda: controller.show_frame(OutputPage))
         doPredictionButton.grid(column=0, row=0, padx=(340, 80), pady=(520, 20))
 
-        importButton = tk.Button(self, text="IMPORT FILE", command=getExcel, fg="#4F3D2F", bg="white", width=10, height=1,bd=0)
-        importButton.grid(column=0, row=0, padx=(575,0),pady=(0,270))
+        importButton = tk.Button(self, text="IMPORT FILE", command=getExcel, fg="#4F3D2F", bg="white", width=10, height=1, bd=0)
+        importButton.grid(column=0, row=0, padx=(575, 0), pady=(0, 270))
 
 
 class HistoryPage(tk.Frame):
@@ -528,26 +578,9 @@ class OutputPage(tk.Frame):
                                   command=lambda: controller.show_frame(PredictionPage))
         newDataButton.grid(column=0, row=0, padx=(10, 380), pady=(520, 20))
 
-        downloadButton = tk.Button(self, text="DOWNLOAD OUTPUT", fg="#4F3D2F", command=lambda: downloadExcelOutput(),
+        downloadButton = tk.Button(self, text="DOWNLOAD OUTPUT", fg="#4F3D2F",
                                    bg="white", width=17, height=1, bd=0)
         downloadButton.grid(column=0, row=0, padx=(350, 80), pady=(520, 20))
-
-        def downloadExcelOutput():
-            dateAndTime = datetime.now()
-            dateAndTime = dateAndTime.strftime("%d-%m-%Y_%H.%M.%S")
-
-            filename = "OutputFiles/Output_" + dateAndTime + ".xlsx"
-            workbook = xlsxwriter.Workbook(filename)
-            worksheet = workbook.add_worksheet("Output")
-
-            col = 0
-
-            for row, data in enumerate(dataMatrix):
-                worksheet.write_row(row, col, data)
-
-            worksheet.set_column(0, (len(dataMatrix[0]) - 1), 12)
-
-            workbook.close()
 
 
 app = tkinterApp()
