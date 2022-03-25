@@ -232,11 +232,9 @@ class PredictionPage(tk.Frame):
                 file_label = tk.Label(self, text='Invalid input', foreground='red')
                 file_label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
                 file_label.after(3000, lambda: file_label.destroy())
-<<<<<<< HEAD
+
             else:
                 validateCheckBox()
-=======
->>>>>>> 36ec93a (select y and x for excel file)
 
         doPredictionButton = tk.Button(self, text="DO PREDICTION", fg="#4F3D2F", bg="white", width=23, height=2, bd=0,
                                        command=lambda: nonInteger())
