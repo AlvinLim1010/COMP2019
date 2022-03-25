@@ -390,8 +390,8 @@ class PredictionPage2(tk.Frame):
 
         def getExcel():
             filename = filedialog.askopenfilename(title="Open A File", filetypes=[('Excel Files', '*.xlsx')])
-            e1.insert(0, filename)
-            e1.config(text=filename)
+            filenameEntry.insert(0, filename)
+            filenameEntry.config(text=filename)
 
             global df
             df = pd.read_excel(filename)
@@ -414,7 +414,7 @@ class PredictionPage2(tk.Frame):
         rectangle.create_image(0, 0, image=self.newbg, anchor=NW)
         rectangle.create_text(130, 155, text="POME Prediction AI", fill="#DDAA85", font=('Raleway', 17, 'bold'))
         rectangle.create_text(680, 100, text="Prediction For Excel File", fill="#DDAA85", font=('Raleway', 17, 'bold'))
-        rectangle.create_text(835, 190, text="(ONLY .xlsx FILES)", fill="Black", font=('Raleway', 10))
+        rectangle.create_text(835, 165, text="(ONLY .xlsx FILES)", fill="Black", font=('Raleway', 10))
         rectangle.grid(row=0, column=0)
 
         aboutButton = tk.Button(self, text="ABOUT", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
@@ -442,8 +442,16 @@ class PredictionPage2(tk.Frame):
                                   command=lambda: controller.show_frame(HistoryPage))
         historyButton.grid(column=0, row=0, padx=(0, 840), pady=(460, 100))
 
-        def remove():
+        def clear():
+            filenameEntry.delete(0, 'end')
+            box1.delete(0, END)
             box2.delete(0, END)
+            box3.delete(0, END)
+
+        def clearX():
+            box2.delete(0, END)
+
+        def clearY():
             box3.delete(0, END)
 
         def getX():
@@ -553,11 +561,13 @@ class PredictionPage2(tk.Frame):
                command=lambda: getX()).grid(column=0, row=0, padx=(157, 0), pady=(300, 0))
         Button(self, text='Select Y', activeforeground="white", activebackground="black", bd=0,
                command=lambda: getY()).grid(column=0, row=0, padx=(370, 0), pady=(300, 0))
-        Button(self, text='Remove', activeforeground="white", activebackground="black", bd=0,
-               command=lambda: remove()).grid(column=0, row=0, padx=(400, 0), pady=(400, 0))
+        Button(self, text='Remove X', activeforeground="white", activebackground="black", bd=0,
+               command=lambda: clearX()).grid(column=0, row=0, padx=(157, 0), pady=(400, 0))
+        Button(self, text='Remove Y', activeforeground="white", activebackground="black", bd=0,
+               command=lambda: clearY()).grid(column=0, row=0, padx=(370, 0), pady=(400, 0))
 
-        e1 = Entry(self, text='')
-        e1.grid(column=0, row=0, padx=(260, 0), pady=(0, 270))
+        filenameEntry = Entry(self, text='', width=55)
+        filenameEntry.grid(column=0, row=0, padx=(200, 70), pady=(0, 320))
 
         box1 = Listbox(self, height=15, width=25, selectmode='multiple', activestyle='none')
         box1.grid(row=0, column=0, padx=(0, 50), pady=(15, 0))
@@ -572,9 +582,13 @@ class PredictionPage2(tk.Frame):
                                        command=lambda: predictFileOutput())
         doPredictionButton.grid(column=0, row=0, padx=(340, 80), pady=(520, 20))
 
+        clearButton = tk.Button(self, text="CLEAR ALL", fg="#4F3D2F", bg="white", width=13, height=1, bd=0,
+                                command=lambda: clear())
+        clearButton.grid(column=0, row=0, padx=(850, 80), pady=(520, 20))
+
         importButton = tk.Button(self, text="IMPORT FILE", command=getExcel, fg="#4F3D2F", bg="white", width=10,
                                  height=1, bd=0)
-        importButton.grid(column=0, row=0, padx=(575, 0), pady=(0, 270))
+        importButton.grid(column=0, row=0, padx=(575, 0), pady=(0, 320))
 
 
 class HistoryPage(tk.Frame):
