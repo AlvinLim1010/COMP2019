@@ -175,7 +175,7 @@ class PredictionPage(tk.Frame):
                                     H2SCheck.get())
 
         def nonInteger():
-            if input1.get().isnumeric() and input2.get().isnumeric() and input3.get().isnumeric() and input4.get().isnumeric() and input5.get().isnumeric() and input6.get().isnumeric() and input7.get().isnumeric() and input8.get().isnumeric() and input9.get().isnumeric():
+            if input1.get().isnumeric() or input2.get().isnumeric() or input3.get().isnumeric() or input4.get().isnumeric() or input5.get().isnumeric() or input6.get().isnumeric() or input7.get().isnumeric() or input8.get().isnumeric() or input9.get().isnumeric():
                 validateCheckBox()
             else:
                 file_label = tk.Label(self, text='Invalid input', foreground='red')
