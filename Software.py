@@ -558,13 +558,13 @@ class PredictionPage2(tk.Frame):
             outputScreenSinglePrediction(headingScreen, dataFiles, fullData)
 
         Button(self, text='Select X', activeforeground="white", activebackground="black", bd=0,
-               command=lambda: getX()).grid(column=0, row=0, padx=(157, 0), pady=(300, 0))
+               command=lambda: getX()).grid(column=0, row=0, padx=(190, 0), pady=(300, 0))
         Button(self, text='Select Y', activeforeground="white", activebackground="black", bd=0,
-               command=lambda: getY()).grid(column=0, row=0, padx=(370, 0), pady=(300, 0))
+               command=lambda: getY()).grid(column=0, row=0, padx=(500, 0), pady=(300, 0))
         Button(self, text='Remove X', activeforeground="white", activebackground="black", bd=0,
-               command=lambda: clearX()).grid(column=0, row=0, padx=(157, 0), pady=(400, 0))
+               command=lambda: clearX()).grid(column=0, row=0, padx=(320, 0), pady=(300, 0))
         Button(self, text='Remove Y', activeforeground="white", activebackground="black", bd=0,
-               command=lambda: clearY()).grid(column=0, row=0, padx=(370, 0), pady=(400, 0))
+               command=lambda: clearY()).grid(column=0, row=0, padx=(630, 0), pady=(300, 0))
 
         filenameEntry = Entry(self, text='', width=55)
         filenameEntry.grid(column=0, row=0, padx=(200, 70), pady=(0, 320))
