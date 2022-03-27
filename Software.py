@@ -1,9 +1,7 @@
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
+from tkinter import ttk, filedialog
 from tkinter import *
 import mysql.connector
-from tkinter.filedialog import askopenfile
-from openpyxl import load_workbook
 import xlsxwriter
 from PIL import Image, ImageTk
 from datetime import datetime
@@ -211,9 +209,9 @@ class PredictionPage(tk.Frame):
 
         def validateCheckBox():
             if CO2Check.get() == 0 and CH4Check.get() == 0 and H2SCheck.get() == 0:
-                file_label = tk.Label(self, text='Invalid input', foreground='red')
-                file_label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
-                file_label.after(3000, lambda: file_label.destroy())
+                error_Label = tk.Label(self, text='Invalid input', foreground='red')
+                error_Label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
+                error_Label.after(3000, lambda: error_Label.destroy())
             else:
                 predictSingleOutput(input1.get(), input4.get(), input7.get(),
                                     input2.get(), input5.get(), input8.get(),
@@ -222,14 +220,11 @@ class PredictionPage(tk.Frame):
                                     H2SCheck.get())
 
         def nonInteger():
-            # if (input1.get().isnumeric() or input2.get().isnumeric() or input3.get().isnumeric() or input4.get().isnumeric() or input5.get().isnumeric() or input6.get().isnumeric() or input7.get().isnumeric() or input8.get().isnumeric() or input9.get().isnumeric()):
-            #     validateCheckBox()
-
-            if input1.get() == '' and input2.get() == '' and input3.get() == '' and input4.get() == '' and input5.get() == '' and input6.get() == '' and input7.get() == '' and input8.get() == '' and input9.get() == '':
-                if input1.get().isalpha() or input2.get().isalpha() or input3.get().isalpha() or input4.get().isalpha() or input5.get().isalpha() or input6.get().isalpha() or input7.get().isalpha() or input8.get().isalpha() or input9.get().isalpha():
-                    file_label = tk.Label(self, text='Invalid input', foreground='red')
-                    file_label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
-                    file_label.after(3000, lambda: file_label.destroy())
+            if (input1.get() == '' and input2.get() == '' and input3.get() == '' and input4.get() == '' and input5.get() == '' and input6.get() == '' and input7.get() == '' and input8.get() == '' and input9.get() == '') \
+                    or (input1.get().isalpha() or input2.get().isalpha() or input3.get().isalpha() or input4.get().isalpha() or input5.get().isalpha() or input6.get().isalpha() or input7.get().isalpha() or input8.get().isalpha() or input9.get().isalpha()):
+                    error_Label = tk.Label(self, text='Invalid input', foreground='red')
+                    error_Label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
+                    error_Label.after(3000, lambda: error_Label.destroy())
 
             else:
                 validateCheckBox()
