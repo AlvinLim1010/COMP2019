@@ -14,8 +14,6 @@ from sklearn.multioutput import MultiOutputRegressor  # To make the output be in
 import pandas as pd  # for data manipulation
 import numpy as np  # for data manipulation
 
-TitleFont = ("Arial", 35)
-
 
 class TkinterApp(tk.Tk):
 
