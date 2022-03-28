@@ -17,7 +17,7 @@ import numpy as np  # for data manipulation
 TitleFont = ("Arial", 35)
 
 
-class tkinterApp(tk.Tk):
+class TkinterApp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -40,14 +40,14 @@ class tkinterApp(tk.Tk):
 
         self.frames = {}
 
-        for F in (HomePage, PredictionPage, PredictionPage2, HistoryPage, OutputPage):
+        for F in (HomePage, PredictionPage, PredictionPage2, HistoryPage):
             frame = F(container, self)
 
             self.frames[F] = frame
 
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.show_frame(PredictionPage)
+        self.show_frame(HomePage)
 
         # Get the data from excel to train the AI model
         global updated_df
@@ -58,8 +58,7 @@ class tkinterApp(tk.Tk):
         dataset.drop("Unnamed: 21", axis=1, inplace=True)
         updated_df = dataset
         updated_df['CH4'] = updated_df['CH4'].fillna(updated_df['CH4'].median()).round(1)
-        updated_df['Volume Biogas/L'] = updated_df['Volume Biogas/L'].fillna(
-        updated_df['Volume Biogas/L'].median()).round(1)
+        updated_df['Volume Biogas/L'] = updated_df['Volume Biogas/L'].fillna(updated_df['Volume Biogas/L'].median()).round(1)
         updated_df['H2S'] = updated_df['H2S'].fillna(updated_df['H2S'].median()).round(1)
         updated_df['CO2'] = updated_df['CO2'].fillna(updated_df['CO2'].median()).round(1)
         updated_df['pH Reactor'] = updated_df['pH Reactor'].fillna(updated_df['pH Reactor'].median()).round(1)
@@ -200,12 +199,12 @@ class PredictionPage(tk.Frame):
         CH4Check = tk.IntVar()
         CO2Check = tk.IntVar()
         H2SCheck = tk.IntVar()
-        tk.Checkbutton(self, text='CH4', variable=CH4Check, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0,
-                                                                                                           row=0, padx=(150, 0), pady=(300, 0))
-        tk.Checkbutton(self, text='CO2', variable=CO2Check, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0,
-                                                                                                           row=0, padx=(250, 0), pady=(300, 0))
-        tk.Checkbutton(self, text='H2S', variable=H2SCheck, bg="#E4BC9E", activebackground="#E4BC9E").grid(column=0,
-                                                                                                           row=0, padx= (350, 0), pady=(300, 0))
+        tk.Checkbutton(self, text='CH4', variable=CH4Check, bg="#E4BC9E",
+                       activebackground="#E4BC9E").grid(column=0, row=0, padx=(150, 0), pady=(300, 0))
+        tk.Checkbutton(self, text='CO2', variable=CO2Check, bg="#E4BC9E",
+                       activebackground="#E4BC9E").grid(column=0, row=0, padx=(250, 0), pady=(300, 0))
+        tk.Checkbutton(self, text='H2S', variable=H2SCheck, bg="#E4BC9E",
+                       activebackground="#E4BC9E").grid(column=0, row=0, padx=(350, 0), pady=(300, 0))
 
         def validateCheckBox():
             if CO2Check.get() == 0 and CH4Check.get() == 0 and H2SCheck.get() == 0:
@@ -220,11 +219,13 @@ class PredictionPage(tk.Frame):
                                     H2SCheck.get())
 
         def nonInteger():
-            if (input1.get() == '' and input2.get() == '' and input3.get() == '' and input4.get() == '' and input5.get() == '' and input6.get() == '' and input7.get() == '' and input8.get() == '' and input9.get() == '') \
-                    or (input1.get().isalpha() or input2.get().isalpha() or input3.get().isalpha() or input4.get().isalpha() or input5.get().isalpha() or input6.get().isalpha() or input7.get().isalpha() or input8.get().isalpha() or input9.get().isalpha()):
-                    error_Label = tk.Label(self, text='Invalid input', foreground='red')
-                    error_Label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
-                    error_Label.after(3000, lambda: error_Label.destroy())
+            if (
+                    input1.get() == '' and input2.get() == '' and input3.get() == '' and input4.get() == '' and input5.get() == '' and input6.get() == '' and input7.get() == '' and input8.get() == '' and input9.get() == '') \
+                    or (
+                    input1.get().isalpha() or input2.get().isalpha() or input3.get().isalpha() or input4.get().isalpha() or input5.get().isalpha() or input6.get().isalpha() or input7.get().isalpha() or input8.get().isalpha() or input9.get().isalpha()):
+                error_Label = tk.Label(self, text='Invalid input', foreground='red')
+                error_Label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
+                error_Label.after(3000, lambda: error_Label.destroy())
 
             else:
                 validateCheckBox()
@@ -379,9 +380,6 @@ class PredictionPage(tk.Frame):
 class PredictionPage2(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-
-        listbox = Listbox(self, height=144, width=144, selectmode="multiple")
-        listbox.pack
 
         def getExcel():
             filename = filedialog.askopenfilename(title="Open A File", filetypes=[('Excel Files', '*.xlsx')])
@@ -625,51 +623,5 @@ class HistoryPage(tk.Frame):
         historyButton.grid(column=0, row=0, padx=(0, 840), pady=(460, 100))
 
 
-class OutputPage(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-
-        # Background image
-        bg = Image.open("Pictures/GUI5.png")
-        resizebg = bg.resize((1100, 700), Image.ANTIALIAS)
-
-        self.newbg = ImageTk.PhotoImage(resizebg)
-        rectangle = tk.Canvas(self, width=1100, height=700, borderwidth=0, highlightthickness=0)
-        rectangle.create_image(0, 0, image=self.newbg, anchor=NW)
-        rectangle.create_text(195, 745, text="(ONLY .xlsx FILES)", fill="White", font=('Raleway', 10))
-        rectangle.create_text(130, 155, text="POME Prediction AI", fill="#DDAA85", font=('Raleway', 17, 'bold'))
-        rectangle.grid(row=0, column=0)
-
-        aboutButton = tk.Button(self, text="ABOUT", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
-                                font=('Raleway', 10, 'bold'), activebackground="Black",
-                                activeforeground="#DDAA85", command=lambda: controller.show_frame(HomePage))
-        aboutButton.grid(column=0, row=0, padx=(0, 840), pady=(0, 135))
-
-        predictButton = tk.Button(self, text="PREDICTION (SINGLE)", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
-                                  font=('Raleway', 10, 'bold'), activebackground="#4F3D2F",
-                                  activeforeground="#DDAA85", command=lambda: controller.show_frame(PredictionPage))
-        predictButton.grid(column=0, row=0, padx=(0, 840), pady=(100, 70))
-
-        predictButton2 = tk.Button(self, text="PREDICTION (EXCEL)", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
-                                   activebackground="Black", activeforeground="#DDAA85",
-                                   font=('Raleway', 10, 'bold'),
-                                   command=lambda: controller.show_frame(PredictionPage2))
-        predictButton2.grid(column=0, row=0, padx=(0, 840), pady=(300, 100))
-
-        historyButton = tk.Button(self, text="HISTORY", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
-                                  activebackground="#4F3D2F", activeforeground="BLACK",
-                                  font=('Raleway', 10, 'bold'),
-                                  command=lambda: controller.show_frame(HistoryPage))
-        historyButton.grid(column=0, row=0, padx=(0, 840), pady=(460, 100))
-
-        newDataButton = tk.Button(self, text="INPUT NEW DATA", fg="#4F3D2F", bg="white", width=17, height=1, bd=0,
-                                  command=lambda: controller.show_frame(PredictionPage))
-        newDataButton.grid(column=0, row=0, padx=(10, 380), pady=(520, 20))
-
-        downloadButton = tk.Button(self, text="DOWNLOAD OUTPUT", fg="#4F3D2F",
-                                   bg="white", width=17, height=1, bd=0)
-        downloadButton.grid(column=0, row=0, padx=(350, 80), pady=(520, 20))
-
-
-app = tkinterApp()
+app = TkinterApp()
 app.mainloop()
