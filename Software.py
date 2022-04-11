@@ -38,7 +38,7 @@ class TkinterApp(tk.Tk):
 
         self.frames = {}
 
-        for F in (HomePage, PredictionPage, PredictionPage2, HistoryPage):
+        for F in (HomePage, PredictionPage, PredictionPage2):
             frame = F(container, self)
 
             self.frames[F] = frame
@@ -111,12 +111,6 @@ class HomePage(tk.Frame):
                                    command=lambda: controller.show_frame(PredictionPage2))
         predictButton2.grid(column=0, row=0, padx=(0, 840), pady=(300, 100))
 
-        historyButton = tk.Button(self, text="HISTORY", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
-                                  activebackground="#4F3D2F", activeforeground="BLACK",
-                                  font=('Raleway', 10, 'bold'),
-                                  command=lambda: controller.show_frame(HistoryPage))
-        historyButton.grid(column=0, row=0, padx=(0, 840), pady=(460, 100))
-
 
 class PredictionPage(tk.Frame):
     def __init__(self, parent, controller):
@@ -151,11 +145,6 @@ class PredictionPage(tk.Frame):
                                    font=('Raleway', 10, 'bold'),
                                    command=lambda: controller.show_frame(PredictionPage2))
         predictButton2.grid(column=0, row=0, padx=(0, 840), pady=(300, 100))
-
-        historyButton = tk.Button(self, text="HISTORY", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
-                                  font=('Raleway', 10, 'bold'), activebackground="Black",
-                                  activeforeground="#DDAA85", command=lambda: controller.show_frame(HistoryPage))
-        historyButton.grid(column=0, row=0, padx=(0, 840), pady=(460, 100))
 
         input1 = tk.StringVar()
         input2 = tk.StringVar()
@@ -393,12 +382,6 @@ class PredictionPage2(tk.Frame):
                                    command=lambda: controller.show_frame(PredictionPage2))
         predictButton2.grid(column=0, row=0, padx=(0, 840), pady=(300, 100))
 
-        historyButton = tk.Button(self, text="HISTORY", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
-                                  activebackground="Black", activeforeground="#DDAA85",
-                                  font=('Raleway', 10, 'bold'),
-                                  command=lambda: controller.show_frame(HistoryPage))
-        historyButton.grid(column=0, row=0, padx=(0, 840), pady=(460, 100))
-
         def clear():
             filenameEntry.delete(0, 'end')
             box1.delete(0, END)
@@ -546,46 +529,6 @@ class PredictionPage2(tk.Frame):
         importButton = tk.Button(self, text="IMPORT FILE", command=getExcel, fg="#4F3D2F", bg="white", width=10,
                                  height=1, bd=0)
         importButton.grid(column=0, row=0, padx=(575, 0), pady=(0, 320))
-
-
-class HistoryPage(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-
-        # Background image
-        bg = Image.open("Pictures/GUI4.png")
-        resizebg = bg.resize((1100, 700), Image.ANTIALIAS)
-
-        self.newbg = ImageTk.PhotoImage(resizebg)
-        rectangle = tk.Canvas(self, width=1100, height=700, borderwidth=0, highlightthickness=0)
-        rectangle.create_image(0, 0, image=self.newbg, anchor=NW)
-        rectangle.create_text(130, 155, text="POME Prediction AI", fill="#DDAA85", font=('Raleway', 17, 'bold'))
-        rectangle.grid(row=0, column=0)
-
-        aboutButton = tk.Button(self, text="ABOUT", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
-                                activebackground="Black", activeforeground="#DDAA85",
-                                font=('Raleway', 10, 'bold'),
-                                command=lambda: controller.show_frame(HomePage))
-        aboutButton.grid(column=0, row=0, padx=(0, 840), pady=(0, 135))
-
-        predictButton = tk.Button(self, text="PREDICTION (SINGLE)", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
-                                  activebackground="Black", activeforeground="#DDAA85",
-                                  font=('Raleway', 10, 'bold'),
-                                  command=lambda: controller.show_frame(PredictionPage))
-        predictButton.grid(column=0, row=0, padx=(0, 840), pady=(100, 70))
-
-        predictButton2 = tk.Button(self, text="PREDICTION (EXCEL)", fg="#DDAA85", bg="Black", width=30, height=2, bd=0,
-                                   activebackground="Black", activeforeground="#DDAA85",
-                                   font=('Raleway', 10, 'bold'),
-                                   command=lambda: controller.show_frame(PredictionPage2))
-        predictButton2.grid(column=0, row=0, padx=(0, 840), pady=(300, 100))
-
-        historyButton = tk.Button(self, text="HISTORY", fg="#DDAA85", bg="#4F3D2F", width=30, height=2, bd=0,
-                                  activebackground="#4F3D2F", activeforeground="#DDAA85",
-                                  font=('Raleway', 10, 'bold'),
-                                  command=lambda: controller.show_frame(HistoryPage))
-        historyButton.grid(column=0, row=0, padx=(0, 840), pady=(460, 100))
-
 
 app = TkinterApp()
 app.mainloop()
