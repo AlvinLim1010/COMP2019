@@ -175,7 +175,7 @@ class PredictionPage(tk.Frame):
         input5Entered = tk.Entry(self, width=30, textvariable=input3)
         input5Entered.grid(column=0, row=0, padx=(765, 0), pady=(0, 165))
 
-        #OLR
+        #ORL
         input6Entered = tk.Entry(self, width=30, textvariable=input4)
         input6Entered.grid(column=0, row=0, padx=(30, 0), pady=(70, 0))
 
@@ -185,7 +185,6 @@ class PredictionPage(tk.Frame):
 
         CH4Check = tk.IntVar()
         CO2Check = tk.IntVar()
-        H2SCheck = tk.IntVar()
         tk.Checkbutton(self, text='CH4', variable=CH4Check, bg="#E4BC9E",
                        activebackground="#E4BC9E").grid(column=0, row=0, padx=(150, 0), pady=(300, 0))
         tk.Checkbutton(self, text='CO2', variable=CO2Check, bg="#E4BC9E",
@@ -232,7 +231,7 @@ class PredictionPage(tk.Frame):
             CO2Check.set(0)
 
         def predictSingleOutput(ph_input, cod_input1, cod_input2, bod_input,
-                                olr_input, ch4_input, co2_input):
+                                orl_input, ch4_input, co2_input):
             xInput = [[]]
             x = []
             y = []
@@ -249,12 +248,13 @@ class PredictionPage(tk.Frame):
             if cod_input2 != '':
                 xInput = np.concatenate((xInput, [[float(cod_input2)]]), 1)
                 x = np.concatenate((x, ['COD Eff/mg/L']))
-            if olr_input != '':
-                xInput = np.concatenate((xInput, [[float(olr_input)]]), 1)
-                x = np.concatenate((x, ['OLR']))
+            if orl_input != '':
+                xInput = np.concatenate((xInput, [[float(orl_input)]]), 1)
+                x = np.concatenate((x, ['ORL gCOD/Ld']))
             if bod_input != '':
                 xInput = np.concatenate((xInput, [[float(bod_input)]]), 1)
                 x = np.concatenate((x, ['BOD Eff/mg/L']))
+                y = np.concatenate((y, ['Volume Biogas']))
             if ch4_input == 1:
                 y = np.concatenate((y, ['CH4']))
             if co2_input == 1:
