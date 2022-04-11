@@ -162,37 +162,26 @@ class PredictionPage(tk.Frame):
         input3 = tk.StringVar()
         input4 = tk.StringVar()
         input5 = tk.StringVar()
-        input6 = tk.StringVar()
-        input7 = tk.StringVar()
-        input8 = tk.StringVar()
-        input9 = tk.StringVar()
 
-        input1Entered = tk.Entry(self, width=30, textvariable=input1)
-        input1Entered.grid(column=0, row=0, padx=(0, 250), pady=(0, 250))
+        #pH
+        input2Entered = tk.Entry(self, width=30, textvariable=input1)
+        input2Entered.grid(column=0, row=0, padx=(0, 265), pady=(0, 165))
 
-        input2Entered = tk.Entry(self, width=30, textvariable=input2)
-        input2Entered.grid(column=0, row=0, padx=(0, 250), pady=(0, 80))
+        #COD1
+        input4Entered = tk.Entry(self, width=30, textvariable=input2)
+        input4Entered.grid(column=0, row=0, padx=(245, 0), pady=(0, 165))
 
-        input3Entered = tk.Entry(self, width=30, textvariable=input3)
-        input3Entered.grid(column=0, row=0, padx=(0, 250), pady=(90, 0))
+        #COD2
+        input5Entered = tk.Entry(self, width=30, textvariable=input3)
+        input5Entered.grid(column=0, row=0, padx=(765, 0), pady=(0, 165))
 
-        input4Entered = tk.Entry(self, width=30, textvariable=input4)
-        input4Entered.grid(column=0, row=0, padx=(260, 0), pady=(0, 250))
+        #OLR
+        input6Entered = tk.Entry(self, width=30, textvariable=input4)
+        input6Entered.grid(column=0, row=0, padx=(30, 0), pady=(70, 0))
 
-        input5Entered = tk.Entry(self, width=30, textvariable=input5)
-        input5Entered.grid(column=0, row=0, padx=(260, 0), pady=(0, 80))
-
-        input6Entered = tk.Entry(self, width=30, textvariable=input6)
-        input6Entered.grid(column=0, row=0, padx=(260, 0), pady=(90, 0))
-
-        input7Entered = tk.Entry(self, width=30, textvariable=input7)
-        input7Entered.grid(column=0, row=0, padx=(780, 0), pady=(0, 250))
-
-        input8Entered = tk.Entry(self, width=30, textvariable=input8)
-        input8Entered.grid(column=0, row=0, padx=(780, 0), pady=(0, 80))
-
-        input9Entered = tk.Entry(self, width=30, textvariable=input9)
-        input9Entered.grid(column=0, row=0, padx=(780, 0), pady=(90, 0))
+        #BOD
+        input8Entered = tk.Entry(self, width=30, textvariable=input5)
+        input8Entered.grid(column=0, row=0, padx=(509, 0), pady=(70, 0))
 
         CH4Check = tk.IntVar()
         CO2Check = tk.IntVar()
@@ -200,27 +189,24 @@ class PredictionPage(tk.Frame):
         tk.Checkbutton(self, text='CH4', variable=CH4Check, bg="#E4BC9E",
                        activebackground="#E4BC9E").grid(column=0, row=0, padx=(150, 0), pady=(300, 0))
         tk.Checkbutton(self, text='CO2', variable=CO2Check, bg="#E4BC9E",
-                       activebackground="#E4BC9E").grid(column=0, row=0, padx=(250, 0), pady=(300, 0))
-        tk.Checkbutton(self, text='H2S', variable=H2SCheck, bg="#E4BC9E",
                        activebackground="#E4BC9E").grid(column=0, row=0, padx=(350, 0), pady=(300, 0))
 
         def validateCheckBox():
-            if CO2Check.get() == 0 and CH4Check.get() == 0 and H2SCheck.get() == 0:
+            if CO2Check.get() == 0 and CH4Check.get() == 0:
                 error_Label = tk.Label(self, text='Invalid input', foreground='red')
                 error_Label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
                 error_Label.after(3000, lambda: error_Label.destroy())
             else:
-                predictSingleOutput(input1.get(), input4.get(), input7.get(),
-                                    input2.get(), input5.get(), input8.get(),
-                                    input3.get(), input6.get(), input9.get(),
-                                    CH4Check.get(), CO2Check.get(),
-                                    H2SCheck.get())
+                predictSingleOutput( input1.get(),
+                                    input2.get(), input3.get(), input4.get(),
+                                    input5.get(),
+                                    CH4Check.get(), CO2Check.get())
 
         def nonInteger():
             if (
-                    input1.get() == '' and input2.get() == '' and input3.get() == '' and input4.get() == '' and input5.get() == '' and input6.get() == '' and input7.get() == '' and input8.get() == '' and input9.get() == '') \
+                    input1.get() == '' and input2.get() == '' and input3.get() == '' and input4.get() == '' and input5.get() == '') \
                     or (
-                    input1.get().isalpha() or input2.get().isalpha() or input3.get().isalpha() or input4.get().isalpha() or input5.get().isalpha() or input6.get().isalpha() or input7.get().isalpha() or input8.get().isalpha() or input9.get().isalpha()):
+                    input1.get().isalpha() or input2.get().isalpha() or input3.get().isalpha() or input4.get().isalpha() or input5.get().isalpha()):
                 error_Label = tk.Label(self, text='Invalid input', foreground='red')
                 error_Label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
                 error_Label.after(3000, lambda: error_Label.destroy())
@@ -242,16 +228,11 @@ class PredictionPage(tk.Frame):
             input3.set("")
             input4.set("")
             input5.set("")
-            input6.set("")
-            input7.set("")
-            input8.set("")
-            input9.set("")
             CH4Check.set(0)
             CO2Check.set(0)
-            H2SCheck.set(0)
 
-        def predictSingleOutput(ph_input1, ph_input2, ph_input3, cod_input1, cod_input2, cod_input3, bod_input1,
-                                bod_input2, bod_input3, ch4_input, co2_input, h2s_input):
+        def predictSingleOutput(ph_input, cod_input1, cod_input2, bod_input,
+                                olr_input, ch4_input, co2_input):
             xInput = [[]]
             x = []
             y = []
@@ -259,40 +240,25 @@ class PredictionPage(tk.Frame):
             x = np.array(x)
             y = np.array(y)
 
-            if ph_input1 != '':
-                xInput = np.concatenate((xInput, [[float(ph_input1)]]), 1)
-                x = np.concatenate((x, ['pH Reactor']))
-            if ph_input2 != '':
-                xInput = np.concatenate((xInput, [[float(ph_input2)]]), 1)
+            if ph_input != '':
+                xInput = np.concatenate((xInput, [[float(ph_input)]]), 1)
                 x = np.concatenate((x, ['pH F']))
-            if ph_input3 != '':
-                xInput = np.concatenate((xInput, [[float(ph_input3)]]), 1)
-                x = np.concatenate((x, ['pH Eff']))
             if cod_input1 != '':
                 xInput = np.concatenate((xInput, [[float(cod_input1)]]), 1)
                 x = np.concatenate((x, ['COD F/mg/L']))
             if cod_input2 != '':
                 xInput = np.concatenate((xInput, [[float(cod_input2)]]), 1)
                 x = np.concatenate((x, ['COD Eff/mg/L']))
-            if cod_input3 != '':
-                xInput = np.concatenate((xInput, [[float(cod_input3)]]), 1)
-                x = np.concatenate((x, ['COD removal']))
-            if bod_input1 != '':
-                xInput = np.concatenate((xInput, [[float(bod_input1)]]), 1)
-                x = np.concatenate((x, ['BOD F/mg/L']))
-            if bod_input2 != '':
-                xInput = np.concatenate((xInput, [[float(bod_input2)]]), 1)
+            if olr_input != '':
+                xInput = np.concatenate((xInput, [[float(olr_input)]]), 1)
+                x = np.concatenate((x, ['OLR']))
+            if bod_input != '':
+                xInput = np.concatenate((xInput, [[float(bod_input)]]), 1)
                 x = np.concatenate((x, ['BOD Eff/mg/L']))
-            if bod_input3 != '':
-                xInput = np.concatenate((xInput, [[float(bod_input3)]]), 1)
-                x = np.concatenate((x, ['BOD removal']))
-
             if ch4_input == 1:
                 y = np.concatenate((y, ['CH4']))
             if co2_input == 1:
                 y = np.concatenate((y, ['CO2']))
-            if h2s_input == 1:
-                y = np.concatenate((y, ['H2S']))
 
             # Getting dataset to fit to Model
             xData = updated_df[x].values
