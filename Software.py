@@ -153,24 +153,24 @@ class PredictionPage(tk.Frame):
         input5 = tk.StringVar()
 
         #pH
-        input2Entered = tk.Entry(self, width=30, textvariable=input1)
-        input2Entered.grid(column=0, row=0, padx=(0, 265), pady=(0, 165))
+        input1Entered = tk.Entry(self, width=30, textvariable=input1)
+        input1Entered.grid(column=0, row=0, padx=(0, 265), pady=(0, 165))
 
         #COD1
-        input4Entered = tk.Entry(self, width=30, textvariable=input2)
-        input4Entered.grid(column=0, row=0, padx=(245, 0), pady=(0, 165))
+        input2Entered = tk.Entry(self, width=30, textvariable=input2)
+        input2Entered.grid(column=0, row=0, padx=(245, 0), pady=(0, 165))
 
         #COD2
-        input5Entered = tk.Entry(self, width=30, textvariable=input3)
-        input5Entered.grid(column=0, row=0, padx=(765, 0), pady=(0, 165))
+        input3Entered = tk.Entry(self, width=30, textvariable=input3)
+        input3Entered.grid(column=0, row=0, padx=(765, 0), pady=(0, 165))
 
-        #ORL
-        input6Entered = tk.Entry(self, width=30, textvariable=input4)
-        input6Entered.grid(column=0, row=0, padx=(30, 0), pady=(70, 0))
+        #BOD1
+        input4Entered = tk.Entry(self, width=30, textvariable=input4)
+        input4Entered.grid(column=0, row=0, padx=(30, 0), pady=(70, 0))
 
-        #BOD
-        input8Entered = tk.Entry(self, width=30, textvariable=input5)
-        input8Entered.grid(column=0, row=0, padx=(509, 0), pady=(70, 0))
+        #BOD2
+        input5Entered = tk.Entry(self, width=30, textvariable=input5)
+        input5Entered.grid(column=0, row=0, padx=(509, 0), pady=(70, 0))
 
         CH4Check = tk.IntVar()
         CO2Check = tk.IntVar()
@@ -219,8 +219,8 @@ class PredictionPage(tk.Frame):
             CH4Check.set(0)
             CO2Check.set(0)
 
-        def predictSingleOutput(ph_input, cod_input1, cod_input2, bod_input,
-                                orl_input, ch4_input, co2_input):
+        def predictSingleOutput(ph_input, cod_input1, cod_input2, bod1_input,
+                                bod2_input, ch4_input, co2_input):
             xInput = [[]]
             x = []
             y = []
@@ -237,11 +237,11 @@ class PredictionPage(tk.Frame):
             if cod_input2 != '':
                 xInput = np.concatenate((xInput, [[float(cod_input2)]]), 1)
                 x = np.concatenate((x, ['COD Eff/mg/L']))
-            if orl_input != '':
-                xInput = np.concatenate((xInput, [[float(orl_input)]]), 1)
-                x = np.concatenate((x, ['ORL gCOD/Ld']))
-            if bod_input != '':
-                xInput = np.concatenate((xInput, [[float(bod_input)]]), 1)
+            if bod1_input != '':
+                xInput = np.concatenate((xInput, [[float(bod1_input)]]), 1)
+                x = np.concatenate((x, ['BOD F/mg/L']))
+            if bod2_input != '':
+                xInput = np.concatenate((xInput, [[float(bod2_input)]]), 1)
                 x = np.concatenate((x, ['BOD Eff/mg/L']))
                 y = np.concatenate((y, ['Volume Biogas']))
             if ch4_input == 1:
