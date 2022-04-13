@@ -182,7 +182,7 @@ class PredictionPage(tk.Frame):
         def validateCheckBox():
             if CO2Check.get() == 0 and CH4Check.get() == 0:
                 error_Label = tk.Label(self, text='Invalid input', foreground='red')
-                error_Label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
+                error_Label.grid(column=0, row=0, padx=(350, 90), pady=(580, 20))
                 error_Label.after(3000, lambda: error_Label.destroy())
             else:
                 predictSingleOutput( input1.get(),
@@ -196,7 +196,7 @@ class PredictionPage(tk.Frame):
                     or (
                     input1.get().isalpha() or input2.get().isalpha() or input3.get().isalpha() or input4.get().isalpha() or input5.get().isalpha()):
                 error_Label = tk.Label(self, text='Invalid input', foreground='red')
-                error_Label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
+                error_Label.grid(column=0, row=0, padx=(350, 90), pady=(580, 20))
                 error_Label.after(3000, lambda: error_Label.destroy())
 
             else:
@@ -348,7 +348,7 @@ class PredictionPage2(tk.Frame):
                 box1.insert(END, item)
 
             file_label = tk.Label(self, text='File Uploaded Successfully!', foreground='green')
-            file_label.grid(column=0, row=0, padx=(350, 80), pady=(580, 20))
+            file_label.grid(column=0, row=0, padx=(350, 90), pady=(580, 20))
             file_label.after(3000, lambda: file_label.destroy())
 
         # Background image
@@ -422,80 +422,95 @@ class PredictionPage2(tk.Frame):
 
             box1.select_clear(0, END)
 
+        def validateListBox():
+            if not x_v or not y_v:
+                error_Label = tk.Label(self, text='Invalid input', foreground='red')
+                error_Label.grid(column=0, row=0, padx=(350, 90), pady=(580, 20))
+                error_Label.after(3000, lambda: error_Label.destroy())
+            else:
+                predictFileOutput()
+
         def predictFileOutput():
-            # Getting dataset to fit to Model
-            xData = updated_df[x_v].values
-            yData = updated_df[y_v].values
+            try:
 
-            # Getting dataset to do prediction
-            xInput = df[x_v].values
+                # Getting dataset to fit to Model
+                xData = updated_df[x_v].values
+                yData = updated_df[y_v].values
 
-            # AI Model
-            svr = SVR(kernel='rbf')
-            multiOutputSVR = MultiOutputRegressor(svr)
-            multiOutputSVR = multiOutputSVR.fit(xData, yData)
+                # Getting dataset to do prediction
+                xInput = df[x_v].values
 
-            y_pred = multiOutputSVR.predict(xInput)
-            y_pred = np.around(y_pred, 3)
+                # AI Model
+                svr = SVR(kernel='rbf')
+                multiOutputSVR = MultiOutputRegressor(svr)
+                multiOutputSVR = multiOutputSVR.fit(xData, yData)
 
-            fullData = np.concatenate((y_pred, xInput), axis=1)
-            heading = np.concatenate((y_v, x_v))
-            dataFiles = np.vstack((heading, fullData))
-            headingScreen = heading.tolist()
-            fullData = fullData.tolist()
+                y_pred = multiOutputSVR.predict(xInput)
+                y_pred = np.around(y_pred, 3)
 
-            def outputScreenSinglePrediction(headingsToDisplayOnScreen, dataToDisplayInFile, dataToDisplayOnScreen):
-                outputDisplaying = Tk()
-                outputDisplaying.title("OutputScreen")
-                outputDisplaying.resizable(0, 0)
+                fullData = np.concatenate((y_pred, xInput), axis=1)
+                heading = np.concatenate((y_v, x_v))
+                dataFiles = np.vstack((heading, fullData))
+                headingScreen = heading.tolist()
+                fullData = fullData.tolist()
 
-                def downloadExcelOutput():
-                    dateAndTime = datetime.now()
-                    dateAndTime = dateAndTime.strftime("%d-%m-%Y_%H.%M.%S")
+                def outputScreenSinglePrediction(headingsToDisplayOnScreen, dataToDisplayInFile, dataToDisplayOnScreen):
+                    outputDisplaying = Tk()
+                    outputDisplaying.title("OutputScreen")
+                    outputDisplaying.resizable(0, 0)
 
-                    filename = "OutputFiles/Output_" + dateAndTime + ".xlsx"
-                    workbook = xlsxwriter.Workbook(filename)
-                    worksheet = workbook.add_worksheet("Output")
+                    def downloadExcelOutput():
+                        dateAndTime = datetime.now()
+                        dateAndTime = dateAndTime.strftime("%d-%m-%Y_%H.%M.%S")
 
-                    col = 0
+                        filename = "OutputFiles/Output_" + dateAndTime + ".xlsx"
+                        workbook = xlsxwriter.Workbook(filename)
+                        worksheet = workbook.add_worksheet("Output")
 
-                    for row, dataInFile in enumerate(dataToDisplayInFile):
-                        worksheet.write_row(row, col, dataInFile)
+                        col = 0
 
-                    worksheet.set_column(0, (len(dataToDisplayInFile[0]) - 1), 12)
+                        for row, dataInFile in enumerate(dataToDisplayInFile):
+                            worksheet.write_row(row, col, dataInFile)
 
-                    workbook.close()
+                        worksheet.set_column(0, (len(dataToDisplayInFile[0]) - 1), 12)
 
-                tree_frame = Frame(outputDisplaying)
-                tree_frame.pack()
+                        workbook.close()
 
-                tree_scroll = Scrollbar(tree_frame)
-                tree_scroll.pack(side=RIGHT, fill=Y)
+                    tree_frame = Frame(outputDisplaying)
+                    tree_frame.pack()
 
-                outputTree = ttk.Treeview(tree_frame, show='headings', height=8, yscrollcommand=tree_scroll.set,
-                                          selectmode="none")
-                outputTree.pack()
+                    tree_scroll = Scrollbar(tree_frame)
+                    tree_scroll.pack(side=RIGHT, fill=Y)
 
-                tree_scroll.config(command=outputTree.yview)
+                    outputTree = ttk.Treeview(tree_frame, show='headings', height=8, yscrollcommand=tree_scroll.set,
+                                              selectmode="none")
+                    outputTree.pack()
 
-                outputTree['columns'] = headingsToDisplayOnScreen
-                outputTree.column("#0", width=0, stretch=False)
-                length = int(800 / len(headingsToDisplayOnScreen))
+                    tree_scroll.config(command=outputTree.yview)
 
-                for i in headingsToDisplayOnScreen:
-                    outputTree.column(i, anchor=CENTER, width=length, stretch=False)
-                    outputTree.heading(i, text=i, anchor=CENTER)
+                    outputTree['columns'] = headingsToDisplayOnScreen
+                    outputTree.column("#0", width=0, stretch=False)
+                    length = int(800 / len(headingsToDisplayOnScreen))
 
-                count = 0
-                for data in dataToDisplayOnScreen:
-                    outputTree.insert(parent='', index='end', iid=count, text="", values=data)
-                    count += 1
+                    for i in headingsToDisplayOnScreen:
+                        outputTree.column(i, anchor=CENTER, width=length, stretch=False)
+                        outputTree.heading(i, text=i, anchor=CENTER)
 
-                ttk.Button(outputDisplaying, text='Download Output', command=lambda: downloadExcelOutput()).pack()
+                    count = 0
+                    for data in dataToDisplayOnScreen:
+                        outputTree.insert(parent='', index='end', iid=count, text="", values=data)
+                        count += 1
 
-                outputDisplaying.mainloop()
+                    ttk.Button(outputDisplaying, text='Download Output', command=lambda: downloadExcelOutput()).pack()
 
-            outputScreenSinglePrediction(headingScreen, dataFiles, fullData)
+                    outputDisplaying.mainloop()
+
+                outputScreenSinglePrediction(headingScreen, dataFiles, fullData)
+
+            except:
+                error_Label = tk.Label(self, text='Input Feature is not available', foreground='red')
+                error_Label.grid(column=0, row=0, padx=(350, 90), pady=(580, 20))
+                error_Label.after(3000, lambda: error_Label.destroy())
 
         Button(self, text='Select X', activeforeground="white", activebackground="black", bd=0,
                command=lambda: getX()).grid(column=0, row=0, padx=(190, 0), pady=(300, 0))
@@ -519,7 +534,7 @@ class PredictionPage2(tk.Frame):
         box3.grid(row=0, column=0, padx=(575, 0), pady=(15, 0))
 
         doPredictionButton = tk.Button(self, text="DO PREDICTION", fg="#4F3D2F", bg="white", width=23, height=2, bd=0,
-                                       command=lambda: predictFileOutput())
+                                       command=lambda: validateListBox())
         doPredictionButton.grid(column=0, row=0, padx=(340, 80), pady=(520, 20))
 
         clearButton = tk.Button(self, text="CLEAR ALL", fg="#4F3D2F", bg="white", width=13, height=1, bd=0,
