@@ -426,7 +426,7 @@ class PredictionPage2(tk.Frame):
             box1.select_clear(0, END)
 
         def validateListBox():
-            if not x_v or not y_v:
+            if not x_v:
                 error_Label = tk.Label(self, text='Invalid input', foreground='red')
                 error_Label.grid(column=0, row=0, padx=(350, 90), pady=(580, 20))
                 error_Label.after(3000, lambda: error_Label.destroy())
@@ -435,7 +435,6 @@ class PredictionPage2(tk.Frame):
 
         def predictFileOutput():
             try:
-
                 # Getting dataset to fit to Model
                 xData = updated_df[x_v].values
                 yData = updated_df[y_v].values
