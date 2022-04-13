@@ -1,7 +1,7 @@
+# GUI
 import tkinter as tk
 from tkinter import ttk, filedialog
 from tkinter import *
-import mysql.connector
 import xlsxwriter
 from PIL import Image, ImageTk
 from datetime import datetime
@@ -15,7 +15,7 @@ import pandas as pd  # for data manipulation
 import numpy as np  # for data manipulation
 
 
-class TkinterApp(tk.Tk):
+class Software(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -152,23 +152,23 @@ class PredictionPage(tk.Frame):
         input4 = tk.StringVar()
         input5 = tk.StringVar()
 
-        #pH
+        # pH
         input1Entered = tk.Entry(self, width=30, textvariable=input1)
         input1Entered.grid(column=0, row=0, padx=(0, 265), pady=(0, 165))
 
-        #COD1
+        # COD1
         input2Entered = tk.Entry(self, width=30, textvariable=input2)
         input2Entered.grid(column=0, row=0, padx=(245, 0), pady=(0, 165))
 
-        #COD2
+        # COD2
         input3Entered = tk.Entry(self, width=30, textvariable=input3)
         input3Entered.grid(column=0, row=0, padx=(765, 0), pady=(0, 165))
 
-        #BOD1
+        # BOD1
         input4Entered = tk.Entry(self, width=30, textvariable=input4)
         input4Entered.grid(column=0, row=0, padx=(30, 0), pady=(70, 0))
 
-        #BOD2
+        # BOD2
         input5Entered = tk.Entry(self, width=30, textvariable=input5)
         input5Entered.grid(column=0, row=0, padx=(509, 0), pady=(70, 0))
 
@@ -185,7 +185,7 @@ class PredictionPage(tk.Frame):
                 error_Label.grid(column=0, row=0, padx=(350, 90), pady=(580, 20))
                 error_Label.after(3000, lambda: error_Label.destroy())
             else:
-                predictSingleOutput( input1.get(),
+                predictSingleOutput(input1.get(),
                                     input2.get(), input3.get(), input4.get(),
                                     input5.get(),
                                     CH4Check.get(), CO2Check.get())
@@ -243,7 +243,8 @@ class PredictionPage(tk.Frame):
             if bod2_input != '':
                 xInput = np.concatenate((xInput, [[float(bod2_input)]]), 1)
                 x = np.concatenate((x, ['BOD Eff/mg/L']))
-                y = np.concatenate((y, ['Volume Biogas']))
+
+            y = np.concatenate((y, ['Volume Biogas/L']))
             if ch4_input == 1:
                 y = np.concatenate((y, ['CH4']))
             if co2_input == 1:
@@ -259,6 +260,7 @@ class PredictionPage(tk.Frame):
             multiOutputSVR = multiOutputSVR.fit(xData, yData)
 
             y_pred = multiOutputSVR.predict(xInput)
+            xInput = np.around(xInput, 3)
             y_pred = np.around(y_pred, 3)
 
             dataHeadings = []
@@ -410,7 +412,7 @@ class PredictionPage2(tk.Frame):
 
         def getY():
             global y_v
-            y_v = []
+            y_v = ['Volume Biogas/L']
             s = box1.curselection()
             box3.delete(0, END)
             for i in s:
@@ -418,7 +420,8 @@ class PredictionPage2(tk.Frame):
                 y_v.append(data)
 
             for data in y_v:
-                box3.insert(END, data)
+                if data != 'Volume Biogas/L':
+                    box3.insert(END, data)
 
             box1.select_clear(0, END)
 
@@ -446,6 +449,7 @@ class PredictionPage2(tk.Frame):
                 multiOutputSVR = multiOutputSVR.fit(xData, yData)
 
                 y_pred = multiOutputSVR.predict(xInput)
+                xInput = np.around(xInput, 3)
                 y_pred = np.around(y_pred, 3)
 
                 fullData = np.concatenate((y_pred, xInput), axis=1)
@@ -545,5 +549,6 @@ class PredictionPage2(tk.Frame):
                                  height=1, bd=0)
         importButton.grid(column=0, row=0, padx=(575, 0), pady=(0, 320))
 
-app = TkinterApp()
+
+app = Software()
 app.mainloop()
