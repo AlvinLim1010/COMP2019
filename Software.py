@@ -56,7 +56,8 @@ class Software(tk.Tk):
         dataset.drop("Unnamed: 21", axis=1, inplace=True)
         updated_df = dataset
         updated_df['CH4'] = updated_df['CH4'].fillna(updated_df['CH4'].median()).round(1)
-        updated_df['Volume Biogas/L'] = updated_df['Volume Biogas/L'].fillna(updated_df['Volume Biogas/L'].median()).round(1)
+        updated_df['Volume Biogas/L'] = updated_df['Volume Biogas/L'].fillna(
+            updated_df['Volume Biogas/L'].median()).round(1)
         updated_df['H2S'] = updated_df['H2S'].fillna(updated_df['H2S'].median()).round(1)
         updated_df['CO2'] = updated_df['CO2'].fillna(updated_df['CO2'].median()).round(1)
         updated_df['pH Reactor'] = updated_df['pH Reactor'].fillna(updated_df['pH Reactor'].median()).round(1)
@@ -191,10 +192,10 @@ class PredictionPage(tk.Frame):
                                     CH4Check.get(), CO2Check.get())
 
         def nonInteger():
-            if (
-                    input1.get() == '' and input2.get() == '' and input3.get() == '' and input4.get() == '' and input5.get() == '') \
-                    or (
-                    input1.get().isalpha() or input2.get().isalpha() or input3.get().isalpha() or input4.get().isalpha() or input5.get().isalpha()):
+            if (input1.get() == '' and input2.get() == '' and
+                input3.get() == '' and input4.get() == '' and input5.get() == '') or (
+                    input1.get().isalpha() or input2.get().isalpha() or
+                    input3.get().isalpha() or input4.get().isalpha() or input5.get().isalpha()):
                 error_Label = tk.Label(self, text='Invalid input', foreground='red')
                 error_Label.grid(column=0, row=0, padx=(350, 90), pady=(580, 20))
                 error_Label.after(3000, lambda: error_Label.destroy())
