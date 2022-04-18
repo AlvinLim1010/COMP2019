@@ -7,7 +7,7 @@ from PIL import Image, ImageTk
 from datetime import datetime
 
 # Sklearn
-from sklearn.svm import SVR  # for building SVR model
+from sklearn.linear_model import LinearRegression  # for building LR model
 from sklearn.multioutput import MultiOutputRegressor  # To make the output be independent to each other
 
 # Data Manipulation
@@ -48,31 +48,8 @@ class Software(tk.Tk):
         self.show_frame(HomePage)
 
         # Get the data from excel to train the AI model
-        global updated_df
-        dataset = pd.read_excel("Excel Data File/Data_SEGP.xlsx")
-        dataset.drop("Unnamed: 18", axis=1, inplace=True)
-        dataset.drop("Unnamed: 19", axis=1, inplace=True)
-        dataset.drop("Unnamed: 20", axis=1, inplace=True)
-        dataset.drop("Unnamed: 21", axis=1, inplace=True)
-        updated_df = dataset
-        updated_df['CH4'] = updated_df['CH4'].fillna(updated_df['CH4'].median()).round(1)
-        updated_df['Volume Biogas/L'] = updated_df['Volume Biogas/L'].fillna(
-            updated_df['Volume Biogas/L'].median()).round(1)
-        updated_df['H2S'] = updated_df['H2S'].fillna(updated_df['H2S'].median()).round(1)
-        updated_df['CO2'] = updated_df['CO2'].fillna(updated_df['CO2'].median()).round(1)
-        updated_df['pH Reactor'] = updated_df['pH Reactor'].fillna(updated_df['pH Reactor'].median()).round(1)
-        updated_df['pH F'] = updated_df['pH F'].fillna(updated_df['pH F'].median()).round(1)
-        updated_df['pH Eff'] = updated_df['pH Eff'].fillna(updated_df['pH Eff'].median()).round(1)
-        updated_df['ORL gCOD/Ld'] = updated_df['ORL gCOD/Ld'].fillna(updated_df['ORL gCOD/Ld'].median()).round(1)
-        updated_df['COD F/mg/L'] = updated_df['COD F/mg/L'].fillna(updated_df['COD F/mg/L'].median()).round(1)
-        updated_df['COD Eff/mg/L'] = updated_df['COD Eff/mg/L'].fillna(updated_df['COD Eff/mg/L'].median()).round(1)
-        updated_df['COD removal'] = updated_df['COD removal'].fillna(updated_df['COD removal'].median()).round(1)
-        updated_df['BOD F/mg/L'] = updated_df['BOD F/mg/L'].fillna(updated_df['BOD F/mg/L'].median()).round(1)
-        updated_df['BOD Eff/mg/L'] = updated_df['BOD Eff/mg/L'].fillna(updated_df['BOD Eff/mg/L'].median()).round(1)
-        updated_df['BOD removal'] = updated_df['BOD removal'].fillna(updated_df['BOD removal'].median()).round(1)
-        updated_df['TSS F/mg/L'] = updated_df['TSS F/mg/L'].fillna(updated_df['TSS F/mg/L'].median()).round(1)
-        updated_df['TSS Eff/mg/L'] = updated_df['TSS Eff/mg/L'].fillna(updated_df['TSS Eff/mg/L'].median()).round(1)
-        updated_df['TSS removal'] = updated_df['TSS removal'].fillna(updated_df['TSS removal'].median()).round(1)
+        global dataset
+        dataset = pd.read_excel("Excel Data File/FinalData.xlsx")
 
     def show_frame(self, cont):
         frame = self.frames[cont]
@@ -231,7 +208,7 @@ class PredictionPage(tk.Frame):
 
             if ph_input != '':
                 xInput = np.concatenate((xInput, [[float(ph_input)]]), 1)
-                x = np.concatenate((x, ['pH F']))
+                x = np.concatenate((x, ['pH Reactor']))
             if cod_input1 != '':
                 xInput = np.concatenate((xInput, [[float(cod_input1)]]), 1)
                 x = np.concatenate((x, ['COD F/mg/L']))
@@ -252,15 +229,15 @@ class PredictionPage(tk.Frame):
                 y = np.concatenate((y, ['CO2']))
 
             # Getting dataset to fit to Model
-            xData = updated_df[x].values
-            yData = updated_df[y].values
+            xData = dataset[x].values
+            yData = dataset[y].values
 
             # AI Model
-            svr = SVR(kernel='rbf')
-            multiOutputSVR = MultiOutputRegressor(svr)
-            multiOutputSVR = multiOutputSVR.fit(xData, yData)
+            lr = LinearRegression()
+            multiOutputLR = MultiOutputRegressor(lr)
+            multiOutputLR = multiOutputLR.fit(xData, yData)
 
-            y_pred = multiOutputSVR.predict(xInput)
+            y_pred = multiOutputLR.predict(xInput)
             xInput = np.around(xInput, 3)
             y_pred = np.around(y_pred, 3)
 
@@ -437,18 +414,18 @@ class PredictionPage2(tk.Frame):
         def predictFileOutput():
             try:
                 # Getting dataset to fit to Model
-                xData = updated_df[x_v].values
-                yData = updated_df[y_v].values
+                xData = dataset[x_v].values
+                yData = dataset[y_v].values
 
                 # Getting dataset to do prediction
                 xInput = df[x_v].values
 
                 # AI Model
-                svr = SVR(kernel='rbf')
-                multiOutputSVR = MultiOutputRegressor(svr)
-                multiOutputSVR = multiOutputSVR.fit(xData, yData)
+                lr = LinearRegression()
+                multiOutputLR = MultiOutputRegressor(lr)
+                multiOutputLR = multiOutputLR.fit(xData, yData)
 
-                y_pred = multiOutputSVR.predict(xInput)
+                y_pred = multiOutputLR.predict(xInput)
                 xInput = np.around(xInput, 3)
                 y_pred = np.around(y_pred, 3)
 
