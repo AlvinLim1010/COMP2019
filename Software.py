@@ -222,7 +222,6 @@ class PredictionPage(tk.Frame):
                 xInput = np.concatenate((xInput, [[float(bod2_input)]]), 1)
                 x = np.concatenate((x, ['BOD Eff/mg/L']))
 
-            y = np.concatenate((y, ['Volume Biogas/L']))
             if ch4_input == 1:
                 y = np.concatenate((y, ['CH4']))
             if co2_input == 1:
@@ -390,7 +389,7 @@ class PredictionPage2(tk.Frame):
 
         def getY():
             global y_v
-            y_v = ['Volume Biogas/L']
+            y_v = []
             s = box1.curselection()
             box3.delete(0, END)
             for i in s:
@@ -398,13 +397,12 @@ class PredictionPage2(tk.Frame):
                 y_v.append(data)
 
             for data in y_v:
-                if data != 'Volume Biogas/L':
-                    box3.insert(END, data)
+                box3.insert(END, data)
 
             box1.select_clear(0, END)
 
         def validateListBox():
-            if not x_v:
+            if not x_v and not y_v:
                 error_Label = tk.Label(self, text='Invalid input', foreground='red')
                 error_Label.grid(column=0, row=0, padx=(350, 90), pady=(580, 20))
                 error_Label.after(3000, lambda: error_Label.destroy())
