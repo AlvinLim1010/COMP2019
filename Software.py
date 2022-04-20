@@ -138,11 +138,11 @@ class PredictionPage(tk.Frame):
         input2Entered = tk.Entry(self, width=30, textvariable=input2)
         input2Entered.grid(column=0, row=0, padx=(245, 0), pady=(0, 165))
 
-        # COD2
+        # BOD1
         input3Entered = tk.Entry(self, width=30, textvariable=input3)
         input3Entered.grid(column=0, row=0, padx=(765, 0), pady=(0, 165))
 
-        # BOD1
+        # COD2
         input4Entered = tk.Entry(self, width=30, textvariable=input4)
         input4Entered.grid(column=0, row=0, padx=(30, 0), pady=(70, 0))
 
@@ -164,7 +164,7 @@ class PredictionPage(tk.Frame):
                 error_Label.after(3000, lambda: error_Label.destroy())
             else:
                 predictSingleOutput(input1.get(),
-                                    input2.get(), input3.get(), input4.get(),
+                                    input2.get(), input4.get(), input3.get(),
                                     input5.get(),
                                     CH4Check.get(), CO2Check.get())
 
