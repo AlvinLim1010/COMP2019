@@ -159,7 +159,7 @@ class PredictionPage(tk.Frame):
 
         def validateCheckBox():
             if CO2Check.get() == 0 and CH4Check.get() == 0:
-                error_Label = tk.Label(self, text='Invalid input', foreground='red')
+                error_Label = tk.Label(self, text='Empty checkbox', foreground='red')
                 error_Label.grid(column=0, row=0, padx=(350, 90), pady=(580, 20))
                 error_Label.after(3000, lambda: error_Label.destroy())
             else:
@@ -310,7 +310,7 @@ class PredictionPage(tk.Frame):
                 outputScreenSinglePrediction(dataHeadingOnScreen, dataHeadings, dataOnScreen)
 
             except:
-                error_Label = tk.Label(self, text='Input contain Alphabet', foreground='red')
+                error_Label = tk.Label(self, text='Invalid Input', foreground='red')
                 error_Label.grid(column=0, row=0, padx=(350, 90), pady=(580, 20))
                 error_Label.after(3000, lambda: error_Label.destroy())
 
