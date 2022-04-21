@@ -171,8 +171,8 @@ class PredictionPage(tk.Frame):
         def nonInteger():
             if (input1.get() == '' and input2.get() == '' and
                 input3.get() == '' and input4.get() == '' and input5.get() == '') or (
-                    input1.get().isalpha() == False or input2.get().isalpha() == False or
-                    input3.get().isalpha() == False or input4.get().isalpha() == False or input5.get().isalpha() == False):
+                    input1.get().isalpha() or input2.get().isalpha()  or
+                    input3.get().isalpha()  or input4.get().isalpha() or input5.get().isalpha()):
                 error_Label = tk.Label(self, text='Invalid input', foreground='red')
                 error_Label.grid(column=0, row=0, padx=(350, 90), pady=(580, 20))
                 error_Label.after(3000, lambda: error_Label.destroy())
