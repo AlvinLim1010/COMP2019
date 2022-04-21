@@ -171,8 +171,8 @@ class PredictionPage(tk.Frame):
         def nonInteger():
             if (input1.get() == '' and input2.get() == '' and
                 input3.get() == '' and input4.get() == '' and input5.get() == '') or (
-                    input1.get().isalpha() or input2.get().isalpha() or
-                    input3.get().isalpha() or input4.get().isalpha() or input5.get().isalpha()):
+                    input1.get().isalpha() == False or input2.get().isalpha() == False or
+                    input3.get().isalpha() == False or input4.get().isalpha() == False or input5.get().isalpha() == False):
                 error_Label = tk.Label(self, text='Invalid input', foreground='red')
                 error_Label.grid(column=0, row=0, padx=(350, 90), pady=(580, 20))
                 error_Label.after(3000, lambda: error_Label.destroy())
@@ -401,16 +401,30 @@ class PredictionPage2(tk.Frame):
 
             box1.select_clear(0, END)
 
+        def setX():
+            global x_v
+            x_v = []
+
+        def setY():
+            global y_v
+            y_v = []
+
         def validateListBox():
-            if not x_v and not y_v:
+            try:
+                if not x_v and not y_v:
+                    error_Label = tk.Label(self, text='Invalid input', foreground='red')
+                    error_Label.grid(column=0, row=0, padx=(350, 90), pady=(580, 20))
+                    error_Label.after(3000, lambda: error_Label.destroy())
+                else:
+                    predictFileOutput()
+            except:
                 error_Label = tk.Label(self, text='Invalid input', foreground='red')
                 error_Label.grid(column=0, row=0, padx=(350, 90), pady=(580, 20))
                 error_Label.after(3000, lambda: error_Label.destroy())
-            else:
-                predictFileOutput()
 
         def predictFileOutput():
             try:
+
                 # Getting dataset to fit to Model
                 xData = dataset[x_v].values
                 yData = dataset[y_v].values
@@ -434,6 +448,10 @@ class PredictionPage2(tk.Frame):
                 fullData = fullData.tolist()
 
                 def outputScreenSinglePrediction(headingsToDisplayOnScreen, dataToDisplayInFile, dataToDisplayOnScreen):
+                    setX()
+                    setY()
+                    clearX()
+                    clearY()
                     outputDisplaying = Tk()
                     outputDisplaying.title("OutputScreen")
                     outputDisplaying.resizable(0, 0)
