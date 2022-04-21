@@ -453,7 +453,7 @@ class PredictionPage2(tk.Frame):
                 headingScreen = heading.tolist()
                 fullData = fullData.tolist()
 
-                def outputScreenSinglePrediction(headingsToDisplayOnScreen, dataToDisplayInFile, dataToDisplayOnScreen):
+                def outputScreenExcelPrediction(headingsToDisplayOnScreen, dataToDisplayInFile, dataToDisplayOnScreen):
                     setX()
                     setY()
                     clearX()
@@ -508,7 +508,7 @@ class PredictionPage2(tk.Frame):
 
                     outputDisplaying.mainloop()
 
-                outputScreenSinglePrediction(headingScreen, dataFiles, fullData)
+                outputScreenExcelPrediction(headingScreen, dataFiles, fullData)
 
             except:
                 error_Label = tk.Label(self, text='Input Feature is not available', foreground='red')
