@@ -171,8 +171,8 @@ class PredictionPage(tk.Frame):
         def nonInteger():
             if (input1.get() == '' and input2.get() == '' and
                 input3.get() == '' and input4.get() == '' and input5.get() == '') or (
-                    input1.get().isalpha() or input2.get().isalpha()  or
-                    input3.get().isalpha()  or input4.get().isalpha() or input5.get().isalpha()):
+                    input1.get().isalpha() or input2.get().isalpha() or
+                    input3.get().isalpha() or input4.get().isalpha() or input5.get().isalpha()):
                 error_Label = tk.Label(self, text='Invalid input', foreground='red')
                 error_Label.grid(column=0, row=0, padx=(350, 90), pady=(580, 20))
                 error_Label.after(3000, lambda: error_Label.destroy())
@@ -199,114 +199,120 @@ class PredictionPage(tk.Frame):
 
         def predictSingleOutput(ph_input, cod_input1, cod_input2, bod1_input,
                                 bod2_input, ch4_input, co2_input):
-            xInput = [[]]
-            x = []
-            y = []
-            xInput = np.asarray(xInput)
-            x = np.array(x)
-            y = np.array(y)
+            try:
+                xInput = [[]]
+                x = []
+                y = []
+                xInput = np.asarray(xInput)
+                x = np.array(x)
+                y = np.array(y)
 
-            if ph_input != '':
-                xInput = np.concatenate((xInput, [[float(ph_input)]]), 1)
-                x = np.concatenate((x, ['pH Reactor']))
-            if cod_input1 != '':
-                xInput = np.concatenate((xInput, [[float(cod_input1)]]), 1)
-                x = np.concatenate((x, ['COD F/mg/L']))
-            if cod_input2 != '':
-                xInput = np.concatenate((xInput, [[float(cod_input2)]]), 1)
-                x = np.concatenate((x, ['COD Eff/mg/L']))
-            if bod1_input != '':
-                xInput = np.concatenate((xInput, [[float(bod1_input)]]), 1)
-                x = np.concatenate((x, ['BOD F/mg/L']))
-            if bod2_input != '':
-                xInput = np.concatenate((xInput, [[float(bod2_input)]]), 1)
-                x = np.concatenate((x, ['BOD Eff/mg/L']))
+                if ph_input != '':
+                    xInput = np.concatenate((xInput, [[float(ph_input)]]), 1)
+                    x = np.concatenate((x, ['pH Reactor']))
+                if cod_input1 != '':
+                    xInput = np.concatenate((xInput, [[float(cod_input1)]]), 1)
+                    x = np.concatenate((x, ['COD F/mg/L']))
+                if cod_input2 != '':
+                    xInput = np.concatenate((xInput, [[float(cod_input2)]]), 1)
+                    x = np.concatenate((x, ['COD Eff/mg/L']))
+                if bod1_input != '':
+                    xInput = np.concatenate((xInput, [[float(bod1_input)]]), 1)
+                    x = np.concatenate((x, ['BOD F/mg/L']))
+                if bod2_input != '':
+                    xInput = np.concatenate((xInput, [[float(bod2_input)]]), 1)
+                    x = np.concatenate((x, ['BOD Eff/mg/L']))
 
-            if ch4_input == 1:
-                y = np.concatenate((y, ['CH4']))
-            if co2_input == 1:
-                y = np.concatenate((y, ['CO2']))
+                if ch4_input == 1:
+                    y = np.concatenate((y, ['CH4']))
+                if co2_input == 1:
+                    y = np.concatenate((y, ['CO2']))
 
-            # Getting dataset to fit to Model
-            xData = dataset[x].values
-            yData = dataset[y].values
+                # Getting dataset to fit to Model
+                xData = dataset[x].values
+                yData = dataset[y].values
 
-            # AI Model
-            lr = LinearRegression()
-            multiOutputLR = MultiOutputRegressor(lr)
-            multiOutputLR = multiOutputLR.fit(xData, yData)
+                # AI Model
+                lr = LinearRegression()
+                multiOutputLR = MultiOutputRegressor(lr)
+                multiOutputLR = multiOutputLR.fit(xData, yData)
 
-            y_pred = multiOutputLR.predict(xInput)
-            xInput = np.around(xInput, 3)
-            y_pred = np.around(y_pred, 3)
+                y_pred = multiOutputLR.predict(xInput)
+                xInput = np.around(xInput, 3)
+                y_pred = np.around(y_pred, 3)
 
-            dataHeadings = []
-            dataXAndY = [[]]
-            dataHeadings = np.array(dataHeadings)
-            dataXAndY = np.array(dataXAndY)
+                dataHeadings = []
+                dataXAndY = [[]]
+                dataHeadings = np.array(dataHeadings)
+                dataXAndY = np.array(dataXAndY)
 
-            dataHeadings = np.concatenate((dataHeadings, y))
-            dataHeadings = np.concatenate((dataHeadings, x))
-            dataHeadingOnScreen = dataHeadings.tolist()
-            dataXAndY = np.concatenate((dataXAndY, y_pred), 1)
-            dataXAndY = np.concatenate((dataXAndY, xInput), 1)
-            dataOnScreen = dataXAndY.tolist()
-            dataHeadings = np.vstack((dataHeadings, dataXAndY))
+                dataHeadings = np.concatenate((dataHeadings, y))
+                dataHeadings = np.concatenate((dataHeadings, x))
+                dataHeadingOnScreen = dataHeadings.tolist()
+                dataXAndY = np.concatenate((dataXAndY, y_pred), 1)
+                dataXAndY = np.concatenate((dataXAndY, xInput), 1)
+                dataOnScreen = dataXAndY.tolist()
+                dataHeadings = np.vstack((dataHeadings, dataXAndY))
 
-            clear()
+                clear()
 
-            def outputScreenSinglePrediction(headingsToDisplayOnScreen, dataToDisplayInFile, dataToDisplayOnScreen):
-                outputDisplaying = Tk()
-                outputDisplaying.title("OutputScreen")
-                outputDisplaying.resizable(0, 0)
+                def outputScreenSinglePrediction(headingsToDisplayOnScreen, dataToDisplayInFile, dataToDisplayOnScreen):
+                    outputDisplaying = Tk()
+                    outputDisplaying.title("OutputScreen")
+                    outputDisplaying.resizable(0, 0)
 
-                def downloadExcelOutput():
-                    dateAndTime = datetime.now()
-                    dateAndTime = dateAndTime.strftime("%d-%m-%Y_%H.%M.%S")
+                    def downloadExcelOutput():
+                        dateAndTime = datetime.now()
+                        dateAndTime = dateAndTime.strftime("%d-%m-%Y_%H.%M.%S")
 
-                    filename = "OutputFiles/Output_" + dateAndTime + ".xlsx"
-                    workbook = xlsxwriter.Workbook(filename)
-                    worksheet = workbook.add_worksheet("Output")
+                        filename = "OutputFiles/Output_" + dateAndTime + ".xlsx"
+                        workbook = xlsxwriter.Workbook(filename)
+                        worksheet = workbook.add_worksheet("Output")
 
-                    col = 0
+                        col = 0
 
-                    for row, dataInFile in enumerate(dataToDisplayInFile):
-                        worksheet.write_row(row, col, dataInFile)
+                        for row, dataInFile in enumerate(dataToDisplayInFile):
+                            worksheet.write_row(row, col, dataInFile)
 
-                    worksheet.set_column(0, (len(dataToDisplayInFile[0]) - 1), 12)
+                        worksheet.set_column(0, (len(dataToDisplayInFile[0]) - 1), 12)
 
-                    workbook.close()
+                        workbook.close()
 
-                tree_frame = Frame(outputDisplaying)
-                tree_frame.pack()
+                    tree_frame = Frame(outputDisplaying)
+                    tree_frame.pack()
 
-                tree_scroll = Scrollbar(tree_frame)
-                tree_scroll.pack(side=RIGHT, fill=Y)
+                    tree_scroll = Scrollbar(tree_frame)
+                    tree_scroll.pack(side=RIGHT, fill=Y)
 
-                outputTree = ttk.Treeview(tree_frame, show='headings', height=8, yscrollcommand=tree_scroll.set,
-                                          selectmode="none")
-                outputTree.pack()
+                    outputTree = ttk.Treeview(tree_frame, show='headings', height=8, yscrollcommand=tree_scroll.set,
+                                              selectmode="none")
+                    outputTree.pack()
 
-                tree_scroll.config(command=outputTree.yview)
+                    tree_scroll.config(command=outputTree.yview)
 
-                outputTree['columns'] = headingsToDisplayOnScreen
-                outputTree.column("#0", width=0, stretch=False)
-                length = int(800 / len(headingsToDisplayOnScreen))
+                    outputTree['columns'] = headingsToDisplayOnScreen
+                    outputTree.column("#0", width=0, stretch=False)
+                    length = int(800 / len(headingsToDisplayOnScreen))
 
-                for i in headingsToDisplayOnScreen:
-                    outputTree.column(i, anchor=CENTER, width=length, stretch=False)
-                    outputTree.heading(i, text=i, anchor=CENTER)
+                    for i in headingsToDisplayOnScreen:
+                        outputTree.column(i, anchor=CENTER, width=length, stretch=False)
+                        outputTree.heading(i, text=i, anchor=CENTER)
 
-                count = 0
-                for data in dataToDisplayOnScreen:
-                    outputTree.insert(parent='', index='end', iid=count, text="", values=data)
-                    count += 1
+                    count = 0
+                    for data in dataToDisplayOnScreen:
+                        outputTree.insert(parent='', index='end', iid=count, text="", values=data)
+                        count += 1
 
-                ttk.Button(outputDisplaying, text='Download Output', command=lambda: downloadExcelOutput()).pack()
+                    ttk.Button(outputDisplaying, text='Download Output', command=lambda: downloadExcelOutput()).pack()
 
-                outputDisplaying.mainloop()
+                    outputDisplaying.mainloop()
 
-            outputScreenSinglePrediction(dataHeadingOnScreen, dataHeadings, dataOnScreen)
+                outputScreenSinglePrediction(dataHeadingOnScreen, dataHeadings, dataOnScreen)
+
+            except:
+                error_Label = tk.Label(self, text='Input contain Alphabet', foreground='red')
+                error_Label.grid(column=0, row=0, padx=(350, 90), pady=(580, 20))
+                error_Label.after(3000, lambda: error_Label.destroy())
 
 
 class PredictionPage2(tk.Frame):
